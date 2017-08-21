@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/17 18:43:13 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/08/17 19:29:04 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/08/21 18:24:20 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ class Lead {
 		Lead	&	operator=(Lead const &); //ajouter rhs ?
 		void		reader(int ac, char **av);
 	private:
+		std::string _arg;
 
 };
 
