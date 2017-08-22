@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/17 18:43:13 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/08/21 18:24:20 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/08/22 20:31:12 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define LEAD_H
 
 # include "BaseException.hpp"
+# include <algorithm>
 
 extern bool		verbose_option;
 
@@ -25,6 +26,7 @@ class Lead {
 		~Lead();
 		Lead	&	operator=(Lead const &); //ajouter rhs ?
 		void		reader(int ac, char **av);
+		void		regex(void);
 	private:
 		std::string _arg;
 
