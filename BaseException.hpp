@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/17 18:39:33 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/08/21 19:03:57 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/08/23 17:07:18 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,10 @@
 # include <iostream>
 # include <string>
 # include <iomanip>
+# include <algorithm>
+# include <sstream>
+# include <iterator>
+# include <regex>
 
 
 # define YELLOW		"\033[33;1m"
@@ -24,6 +28,8 @@
 # define GREEN		"\033[32;1m"
 # define NORMAL		"\033[0m"
 
+
+extern bool		verbose_option;
 
 class BaseException : public std::exception {
 	public:

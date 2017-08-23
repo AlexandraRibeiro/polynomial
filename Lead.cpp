@@ -6,29 +6,30 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/17 18:43:11 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/08/22 20:55:48 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/08/23 17:10:01 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Lead.hpp"
 
-Lead::Lead(void) : _arg("-v") {
-	std::cout << "Lead's constructor called\n";
+Lead::Lead(void) : _arg("-v"), _lexer(NULL) {
+	std::cout << "\t-> Lead's constructor called\n";
 }
 
-Lead::Lead(Lead const & cpy) : _arg("-v") {
-	std::cout << "Lead's copy constructor called\n";
+Lead::Lead(Lead const & cpy) : _arg("-v"), _lexer(NULL) {
+	std::cout << "\t-> Lead's copy constructor called\n";
 	*this = cpy;
 }
 
 Lead::~Lead(void) {
-	std::cout << "Lead's destructor called\n";
+	if (_lexer != NULL)
+		delete(_lexer);
+	std::cout << "\t-> Lead's destructor called\n";
 }
 
 Lead	&	Lead::operator=(Lead const & ) {return *this; }
 
 void		Lead::reader(int ac, char **av) {
-	std::cout << "DEBUG reader() called\n";
 	if (ac == 3 && _arg.compare(av[1]) == 0) {
 		verbose_option = true;
 		_arg = av[2];
@@ -57,13 +58,34 @@ void		Lead::reader(int ac, char **av) {
 
 
 void		Lead::regex(void) {
-	std::cout << "DEBUG regex() called\n";
-	std::string *regexValidCharacters = "";
-	std::string *regexBeginEnd = "";
+	std::regex regexValidChars("[0-9X+\\-\\^\\*\\.\\/]+[=]{1}[0-9X+\\-\\^\\*\\.\\/]+");
 
 	if (_arg.compare("") == 0)
 		throw BaseException("=> Error empty string.");
 	_arg.erase(std::remove (_arg.begin(), _arg.end(), ' '), _arg.end()); 		//remove spaces
 
-	std::cout << _arg << std::endl;
+	if (std::regex_match(_arg, regexValidChars) == false)						//check valid chars
+		throw BaseException("=> (regex) Error detected.");
+
+	split('=');
+}
+
+void		Lead::split(char delim) {
+	std::stringstream ss(_arg);
+	std::string token;
+	while (std::getline(ss, token, delim))
+		_split.push_back(token);
+
+/*DEBUG *************************************************************/
+	std::cout << "_____(debug) verif split :\n";
+	std::copy(_split.begin(), _split.end(),
+	    std::ostream_iterator<std::string>(std::cout, "\n"));
+	std::cout << "_____\n";
+/*******************************************************************/
+
+	runLexer();
+}
+
+void		Lead::runLexer(void) {
+	_lexer = new Lexer();
 }

@@ -6,7 +6,7 @@
 #    By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/03/20 19:26:31 by aribeiro          #+#    #+#              #
-#    Updated: 2017/08/17 19:21:23 by aribeiro         ###   ########.fr        #
+#    Updated: 2017/08/23 16:59:49 by aribeiro         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,6 +14,7 @@ NAME = computorV1
 
 SRC = 	BaseException.cpp \
 		Lead.cpp \
+		Lexer.cpp \
 		main.cpp \
 
 OBJ = $(SRC:.cpp=.o)
