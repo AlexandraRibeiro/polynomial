@@ -6,25 +6,25 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/17 18:43:11 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/08/23 17:10:01 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/08/24 01:10:21 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Lead.hpp"
 
 Lead::Lead(void) : _arg("-v"), _lexer(NULL) {
-	std::cout << "\t-> Lead's constructor called\n";
+	std::cout << BLUE << "\t-> " << NORMAL << "Lead's constructor called\n";
 }
 
 Lead::Lead(Lead const & cpy) : _arg("-v"), _lexer(NULL) {
-	std::cout << "\t-> Lead's copy constructor called\n";
+	std::cout << BLUE << "\t-> " << NORMAL << "Lead's copy constructor called\n";
 	*this = cpy;
 }
 
 Lead::~Lead(void) {
 	if (_lexer != NULL)
 		delete(_lexer);
-	std::cout << "\t-> Lead's destructor called\n";
+	std::cout << BLUE << "\t-> " << NORMAL << "Lead's destructor called\n";
 }
 
 Lead	&	Lead::operator=(Lead const & ) {return *this; }
@@ -76,16 +76,10 @@ void		Lead::split(char delim) {
 	while (std::getline(ss, token, delim))
 		_split.push_back(token);
 
-/*DEBUG *************************************************************/
-	std::cout << "_____(debug) verif split :\n";
-	std::copy(_split.begin(), _split.end(),
-	    std::ostream_iterator<std::string>(std::cout, "\n"));
-	std::cout << "_____\n";
-/*******************************************************************/
-
 	runLexer();
 }
 
 void		Lead::runLexer(void) {
 	_lexer = new Lexer();
+	_lexer->set_lexical(_split);
 }

@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/23 16:53:30 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/08/23 17:38:00 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/08/24 01:17:32 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,16 +27,11 @@ enum tokens {
 	ERROR,		// 8
 };
 
-
-//
-// struct s_scanner {
-// 	int			line_nb;
-// 	int			token;
-// 	std::string	lexeme;
-// 	std::string original_line;
-// 	bool		error;
-// 	int			error_position_lexer;
-// };
+struct s_scanner {
+	int			token;
+	std::string	lexeme;
+	std::string original_line;
+};
 
 class Lexer {
 	public:
@@ -44,9 +39,21 @@ class Lexer {
 		Lexer(Lexer const & cpy);
 		~Lexer(void);
 		Lexer & operator=(Lexer const & );
-
+		//LEXICAL ______________________________________________
+		void						set_lexical(std::vector<std::string> & split);
+		int							fsm(std::string &str, int j);
+		void						fill_lexical(int j, int token, char c);
+		std::vector<s_scanner>		& get_lexical(void);
+		void						debug_print_lexical(void);
+		void						set_error(char c, std::string &str);
+		//GETTER _______________________________________________
+		int							get_token(char c) const;
+		static const std::string				_tokenVerbose[9];
 	private:
-		static const int 			_fsm[11][11];
+		std::vector<s_scanner>					_lexical;
+		std::string								_error;
+		// static const std::string				_tokenVerbose[9];
+		static const int 						_fsm[9][9];
 };
 
 #endif

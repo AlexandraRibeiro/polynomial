@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/23 16:53:26 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/08/23 18:14:08 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/08/24 01:18:54 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 Lexer::Lexer(void) {
 	if (verbose_option == true)
-		std::cout << BLUE << "\t -> " << NORMAL << "Lexer's constructor called" << std::endl;
+		std::cout << BLUE << "\t-> " << NORMAL << "Lexer's constructor called\n";
 }
 
 Lexer::Lexer(Lexer const & cpy) {
@@ -24,16 +24,120 @@ Lexer::Lexer(Lexer const & cpy) {
 
 Lexer::~Lexer(void) {
 	if (verbose_option == true)
-		std::cout << BLUE << "\t\t -> " << NORMAL << "Lexer's destructor called" << std::endl;
+		std::cout << BLUE << "\t-> " << NORMAL << "Lexer's destructor called\n";
 }
 
 Lexer &		Lexer::operator=(Lexer const & ) {
 	return *this;
 }
 
+// LEXICAL _____________________________________________________________________
+void					Lexer::set_lexical(std::vector<std::string> & split) {
+	if (split.size() != 2)
+		throw BaseException("=> (split) Error detected."); 						//SECU double check
+	std::string _p1 = split[0];
+	std::string _p2 = split[1];
+	int j = 0;
+	j = fsm(_p1, j);
+	fsm(_p2, j);
+	debug_print_lexical();
 
-// STATIC _____________________________________________________________________
-const int	Lexer::_fsm[9][9]= {
+}
+
+int					Lexer::fsm(std::string &str, int j) {
+	int i = 0;
+	int previous_state = 0;
+	int current_state = 0;
+	while (str[i] != '\0') {
+		/* Push new s_scanner in lexical */
+		_lexical.push_back(s_scanner());
+		_lexical[j].original_line.append(str);
+		/* Fill _lexical[..] */
+		while (str[i] != '\0') {
+			previous_state = current_state;
+			current_state = _fsm[previous_state][get_token(str[i])];
+			if (current_state == ERROR) {
+				if (i == 0)
+					i = 1;
+				set_error(str[i - 1], str);
+				throw BaseException(_error);
+			}
+			if (current_state != END)
+				fill_lexical(j, current_state, str[i]);
+			else if (current_state == END)
+				break;
+
+			i++;
+		}
+		j++;
+	}
+	return j;
+}
+
+
+void					Lexer::fill_lexical(int j, int token, char c) {
+	if (token != -1)
+		_lexical[j].token = token;
+	if (c != '\0')
+		_lexical[j].lexeme.push_back(c);
+}
+
+std::vector<s_scanner>	& Lexer::get_lexical(void) {
+	return _lexical;
+}
+
+void					Lexer::debug_print_lexical(void) {
+	size_t c = 0;
+	std::cout << BLUE << "\n\n\t********** LEXER **********\n" << NORMAL;
+	while (c < _lexical.size())
+	{
+		std::cout << "\ttoken = " << _tokenVerbose[_lexical[c].token] << std::endl;
+		std::cout << "\tlexeme = \"" << _lexical[c].lexeme << "\"\n";
+		std::cout << "\toriginal line = \"" << _lexical[c].original_line << "\"\n";
+		std::cout << BLUE << "\t___________________________\n" << NORMAL;
+		c++;
+	}
+	std::cout << "\n";
+}
+
+void					Lexer::set_error(char c, std::string &str) {
+	_error.append("=> Error detected after this character '");
+	_error.push_back(c);
+	_error.append("' from this part '");
+	_error.append(str);
+	_error.append("'");
+}
+
+
+// GETTER ______________________________________________________________________
+int			Lexer::get_token(char c) const{
+	if (c >= '0' && c <= '9')
+		return INUM;
+	else if (c == '.')
+		return RNUM;
+	else if (c == 'X')
+		return XSYMB;
+	else if (c == '^')
+		return POWER;
+	else if (c == '+' || c == '-')
+		return SIGNS;
+	else if (c == '*')
+		return MULTI;
+	else if (c == '/')
+		return DIV;
+	else
+		return ERROR;
+}
+
+
+// STATIC PUBLIC _______________________________________________________________
+const std::string	Lexer::_tokenVerbose[9] = {
+	"END", "INUM", "RNUM", "XSYMB", "POWER", "SIGNS", "MULTI", "DIV", "ERROR"
+};
+
+
+// STATIC PRIVATE ______________________________________________________________
+const int			Lexer::_fsm[9][9]= {
 				/* INPUT */
 {END,			INUM,	RNUM,	XSYMB,	POWER,	SIGNS,	MULTI,	DIV,	ERROR},
 /* STATE */
