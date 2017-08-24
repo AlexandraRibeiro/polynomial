@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/24 14:05:42 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/08/24 20:02:26 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/08/24 20:37:50 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,12 @@ enum tokensParser {
 	SIGN		// 11 for exemple *-3 sign not an operand
 }
 
-struct s_scanner2 {
-	int				token;
-	std::string		strValue;
-	long double		iValue;
-	std::string		original_line;
-};
+// struct s_scanner2 {
+// 	int				token;
+// 	std::string		strValue;
+// 	long double		iValue;
+// 	std::string		original_line;
+// };
 
 
 class Parser {
@@ -40,7 +40,8 @@ class Parser {
 		void	fill_parsing(int j, int token, std::string str);
 
 	private:
-		std::vector<s_scanner2>		_parsing;
+		std::vector<long double>		_operands;
+		std::vector<long double>		_values;
 
 };
 
