@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/24 14:05:34 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/08/24 18:07:27 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/08/24 18:35:38 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ void		Parser::set_parsing(std::vector<s_scanner> & lexical) {
 			if (c == 0 && (lexical[c].token == MINUS || lexical[c].token == PLUS)) {
 				fill_parsing(j, -1, lexical[c].lexeme);
 			}
-			else
 			c++;
 		}
 		j++;

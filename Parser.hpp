@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/24 14:05:42 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/08/24 18:01:34 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/08/24 20:02:26 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,18 @@
 # include "BaseException.hpp"
 # include "Lexer.hpp"
 
+
+enum tokensParser {
+	CONTINUE,	// 10 for X^..
+	SIGN		// 11 for exemple *-3 sign not an operand
+}
+
 struct s_scanner2 {
 	int				token;
 	std::string		strValue;
 	long double		iValue;
 	std::string		original_line;
 };
-
 
 
 class Parser {

@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/23 16:53:30 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/08/24 16:48:44 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/08/24 20:02:51 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ class Lexer {
 		void						set_error(char c, std::string &str);
 		//GETTER _______________________________________________
 		int							get_token(char c) const;
-		static const std::string	_tokenVerbose[10];
+		static const std::string	_tokenVerbose[12];
 	private:
 		std::vector<s_scanner>					_lexical;
 		std::string								_error;

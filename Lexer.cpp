@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/23 16:53:26 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/08/24 16:52:23 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/08/24 20:03:50 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,7 @@ int						Lexer::get_token(char c) const{
 
 // STATIC PUBLIC _______________________________________________________________
 const std::string	Lexer::_tokenVerbose[10] = {
-	"END", "INUM", "RNUM", "XSYMB", "PLUS", "MINUS", "POWER", "MULTI", "DIV", "ERROR"
+	"END", "INUM", "RNUM", "XSYMB", "PLUS", "MINUS", "POWER", "MULTI", "DIV", "ERROR", "CONTINUE", "SIGN"
 };
 
 
