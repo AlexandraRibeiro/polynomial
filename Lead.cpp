@@ -6,25 +6,30 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/17 18:43:11 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/08/24 01:10:21 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/08/24 17:31:07 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Lead.hpp"
 
-Lead::Lead(void) : _arg("-v"), _lexer(NULL) {
-	std::cout << BLUE << "\t-> " << NORMAL << "Lead's constructor called\n";
+Lead::Lead(void) : _arg("-v"), _lexer(NULL), _parser(NULL) {
+	if (verbose_option == true)
+		std::cout << BLUE << "\t-> " << NORMAL << "Lead's constructor called\n";
 }
 
-Lead::Lead(Lead const & cpy) : _arg("-v"), _lexer(NULL) {
-	std::cout << BLUE << "\t-> " << NORMAL << "Lead's copy constructor called\n";
+Lead::Lead(Lead const & cpy) : _arg("-v"), _lexer(NULL), _parser(NULL) {
+	if (verbose_option == true)
+		std::cout << BLUE << "\t-> " << NORMAL << "Lead's copy constructor called\n";
 	*this = cpy;
 }
 
 Lead::~Lead(void) {
 	if (_lexer != NULL)
 		delete(_lexer);
-	std::cout << BLUE << "\t-> " << NORMAL << "Lead's destructor called\n";
+	if (_parser != NULL)
+		delete(_parser);
+	if (verbose_option == true)
+		std::cout << BLUE << "\t-> " << NORMAL << "Lead's destructor called\n";
 }
 
 Lead	&	Lead::operator=(Lead const & ) {return *this; }
@@ -59,6 +64,8 @@ void		Lead::reader(int ac, char **av) {
 
 void		Lead::regex(void) {
 	std::regex regexValidChars("[0-9X+\\-\\^\\*\\.\\/]+[=]{1}[0-9X+\\-\\^\\*\\.\\/]+");
+	std::regex regexStart("^[0-9\\-+\\.]");
+	std::regex regexEnd("[0-9\\.]$");
 
 	if (_arg.compare("") == 0)
 		throw BaseException("=> Error empty string.");
@@ -68,6 +75,17 @@ void		Lead::regex(void) {
 		throw BaseException("=> (regex) Error detected.");
 
 	split('=');
+
+	if (std::regex_search(_split[0], regexStart) == false)					//check valid chars
+		throw BaseException("=> (regex) Error detected in the part to the left of the sign '='.");
+	if (std::regex_search(_split[1], regexStart) == false)					//check valid chars
+		throw BaseException("=> (regex) Error detected in the part to the right of the sign '='.");
+	if (std::regex_search(_split[0], regexEnd) == false)					//check valid chars
+		throw BaseException("=> (regex) Error detected in the part to the left of the sign '='.");
+	if (std::regex_search(_split[1], regexEnd) == false)					//check valid chars
+		throw BaseException("=> (regex) Error detected in the part to the right of the sign '='.");
+
+	runLexer();
 }
 
 void		Lead::split(char delim) {
@@ -75,11 +93,17 @@ void		Lead::split(char delim) {
 	std::string token;
 	while (std::getline(ss, token, delim))
 		_split.push_back(token);
-
-	runLexer();
 }
 
 void		Lead::runLexer(void) {
 	_lexer = new Lexer();
 	_lexer->set_lexical(_split);
+
+	runParser();
+}
+
+void		Lead::runParser(void) {
+	_parser = new Parser();
+	_parser->set_parsing(_lexer->get_lexical());
+
 }

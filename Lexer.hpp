@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/23 16:53:30 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/08/24 01:17:32 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/08/24 16:48:44 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,12 @@ enum tokens {
 	INUM, 		// 1 = Integer
 	RNUM,		// 2 = '.' Real (ex: 3.8)
 	XSYMB,		// 3 = 'X'
-	POWER,		// 4 = '^'
-	SIGNS,		// 5 = '+' || '-'
-	MULTI,		// 6 = '*'
-	DIV,		// 7 = '/'
-	ERROR,		// 8
+	PLUS,		// 4 = '+'
+	MINUS,		// 5 = '-'
+	POWER,		// 6 = '^'
+	MULTI,		// 7 = '*'
+	DIV,		// 8 = '/'
+	ERROR,		// 9
 };
 
 struct s_scanner {
@@ -48,12 +49,11 @@ class Lexer {
 		void						set_error(char c, std::string &str);
 		//GETTER _______________________________________________
 		int							get_token(char c) const;
-		static const std::string				_tokenVerbose[9];
+		static const std::string	_tokenVerbose[10];
 	private:
 		std::vector<s_scanner>					_lexical;
 		std::string								_error;
-		// static const std::string				_tokenVerbose[9];
-		static const int 						_fsm[9][9];
+		static const int 						_fsm[10][10];
 };
 
 #endif

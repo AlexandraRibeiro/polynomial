@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/23 16:53:26 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/08/24 01:18:54 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/08/24 16:52:23 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,14 +66,12 @@ int					Lexer::fsm(std::string &str, int j) {
 				fill_lexical(j, current_state, str[i]);
 			else if (current_state == END)
 				break;
-
 			i++;
 		}
 		j++;
 	}
 	return j;
 }
-
 
 void					Lexer::fill_lexical(int j, int token, char c) {
 	if (token != -1)
@@ -110,17 +108,19 @@ void					Lexer::set_error(char c, std::string &str) {
 
 
 // GETTER ______________________________________________________________________
-int			Lexer::get_token(char c) const{
+int						Lexer::get_token(char c) const{
 	if (c >= '0' && c <= '9')
 		return INUM;
 	else if (c == '.')
 		return RNUM;
 	else if (c == 'X')
 		return XSYMB;
+	else if (c == '+')
+		return PLUS;
+	else if (c == '-')
+		return MINUS;
 	else if (c == '^')
 		return POWER;
-	else if (c == '+' || c == '-')
-		return SIGNS;
 	else if (c == '*')
 		return MULTI;
 	else if (c == '/')
@@ -131,22 +131,23 @@ int			Lexer::get_token(char c) const{
 
 
 // STATIC PUBLIC _______________________________________________________________
-const std::string	Lexer::_tokenVerbose[9] = {
-	"END", "INUM", "RNUM", "XSYMB", "POWER", "SIGNS", "MULTI", "DIV", "ERROR"
+const std::string	Lexer::_tokenVerbose[10] = {
+	"END", "INUM", "RNUM", "XSYMB", "PLUS", "MINUS", "POWER", "MULTI", "DIV", "ERROR"
 };
 
 
 // STATIC PRIVATE ______________________________________________________________
-const int			Lexer::_fsm[9][9]= {
+const int			Lexer::_fsm[10][10]= {
 				/* INPUT */
-{END,			INUM,	RNUM,	XSYMB,	POWER,	SIGNS,	MULTI,	DIV,	ERROR},
+{END,			INUM,	RNUM,	XSYMB,	PLUS,	MINUS,	POWER,	MULTI,	DIV,	ERROR},
 /* STATE */
-{INUM,			INUM,	RNUM,	END,	END,	END,	END,	END,	ERROR},
-{RNUM,			RNUM,	RNUM,	END,	ERROR,	END,	END,	END,	ERROR},
-{XSYMB,			ERROR,	ERROR,	ERROR,	END,	END,	END,	ERROR,	ERROR},
-{POWER,			END,	END,	END,	ERROR,	END,	ERROR,	ERROR,	ERROR},
-{SIGNS,			END,	END,	END,	ERROR,	ERROR,	ERROR,	ERROR,	ERROR},
-{MULTI,			END,	END,	END,	ERROR,	END,	ERROR,	ERROR,	ERROR},
-{DIV,			END,	END,	ERROR,	ERROR,	END,	ERROR,	ERROR,	ERROR},
-{ERROR,			ERROR,	ERROR,	ERROR,	ERROR,	ERROR,	ERROR,	ERROR,	ERROR}
+{INUM,			INUM,	RNUM,	ERROR,	END,	END,	END,	END,	END,	ERROR},
+{RNUM,			RNUM,	RNUM,	END,	END,	END,	ERROR,	END,	END,	ERROR},
+{XSYMB,			ERROR,	ERROR,	ERROR,	END,	END,	END,	END,	ERROR,	ERROR},
+{POWER,			END,	END,	END,	END,	END,	ERROR,	ERROR,	ERROR,	ERROR},
+{PLUS,			END,	END,	END,	ERROR,	ERROR,	ERROR,	ERROR,	ERROR,	ERROR},
+{MINUS,			END,	END,	END,	ERROR,	ERROR,	ERROR,	ERROR,	ERROR,	ERROR},
+{MULTI,			END,	END,	END,	END,	END,	ERROR,	ERROR,	ERROR,	ERROR},
+{DIV,			END,	END,	ERROR,	END,	END,	ERROR,	ERROR,	ERROR,	ERROR},
+{ERROR,			ERROR,	ERROR,	ERROR,	ERROR,	ERROR,	ERROR,	ERROR,	ERROR,	ERROR}
 };

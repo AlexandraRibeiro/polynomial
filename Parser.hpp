@@ -1,39 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Lead.hpp                                           :+:      :+:    :+:   */
+/*   Parser.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/08/17 18:43:13 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/08/24 14:11:43 by aribeiro         ###   ########.fr       */
+/*   Created: 2017/08/24 14:05:42 by aribeiro          #+#    #+#             */
+/*   Updated: 2017/08/24 18:01:34 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LEAD_H
-# define LEAD_H
+#ifndef PARSER_H
+#define PARSER_H
 
+# include "BaseException.hpp"
 # include "Lexer.hpp"
-# include "Parser.hpp"
 
-class Lead {
+struct s_scanner2 {
+	int				token;
+	std::string		strValue;
+	long double		iValue;
+	std::string		original_line;
+};
 
+
+
+class Parser {
 	public:
-		Lead(void);
-		Lead(Lead const & cpy);
-		~Lead();
-		Lead	&	operator=(Lead const &); //ajouter rhs ?
-		void		reader(int ac, char **av);
-		void		regex(void);
-		void		split(char delim);
-		void		runLexer(void);
-		void		runParser(void);
+		Parser(void);
+		Parser(Parser const & cpy);
+		~Parser(void);
+		Parser & operator=(Parser const & );
+		void	set_parsing(std::vector<s_scanner> & lexical);
+		void	fill_parsing(int j, int token, std::string str);
 
 	private:
-		std::string					_arg;
-		std::vector<std::string>	_split;
-		Lexer						*_lexer;
-		Parser						*_parser;
+		std::vector<s_scanner2>		_parsing;
+
 };
 
 #endif
