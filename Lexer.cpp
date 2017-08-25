@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/23 16:53:26 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/08/25 16:40:40 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/08/25 17:57:45 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 
 Lexer::Lexer(void) {
-	if (verbose_option == true)
+	if (debug_option == true)
 		std::cout << BLUE << "\t-> " << NORMAL << "Lexer's constructor called\n";
 }
 
@@ -23,7 +23,7 @@ Lexer::Lexer(Lexer const & cpy) {
 }
 
 Lexer::~Lexer(void) {
-	if (verbose_option == true)
+	if (debug_option == true)
 		std::cout << BLUE << "\t-> " << NORMAL << "Lexer's destructor called\n";
 }
 
@@ -40,8 +40,6 @@ void					Lexer::set_lexical(std::vector<std::string> & split) {
 	int j = 0;
 	j = fsm(_p1, j);
 	fsm(_p2, j);
-	debug_print_lexical();
-
 }
 
 int					Lexer::fsm(std::string &str, int j) {

@@ -6,14 +6,14 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/24 14:05:34 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/08/25 17:22:39 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/08/25 17:51:35 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Parser.hpp"
 
 Parser::Parser(void) {
-	if (verbose_option == true)
+	if (debug_option == true)
 		std::cout << BLUE << "\t-> " << NORMAL << "Parser's constructor called\n";
 }
 
@@ -22,7 +22,7 @@ Parser::Parser(Parser const & cpy) {
 }
 
 Parser::~Parser(void) {
-	if (verbose_option == true)
+	if (debug_option == true)
 		std::cout << BLUE << "\t-> " << NORMAL << "Parser's destructor called\n";
 }
 

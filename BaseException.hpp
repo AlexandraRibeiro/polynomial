@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/17 18:39:33 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/08/23 17:07:18 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/08/25 17:52:03 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@
 
 
 extern bool		verbose_option;
+extern bool		debug_option;
 
 class BaseException : public std::exception {
 	public:

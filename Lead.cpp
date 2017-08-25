@@ -6,19 +6,19 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/17 18:43:11 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/08/25 17:25:31 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/08/25 18:01:39 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Lead.hpp"
 
 Lead::Lead(void) : _arg("-v"), _lexer(NULL), _parser(NULL) {
-	if (verbose_option == true)
+	if (debug_option == true)
 		std::cout << BLUE << "\t-> " << NORMAL << "Lead's constructor called\n";
 }
 
 Lead::Lead(Lead const & cpy) : _arg("-v"), _lexer(NULL), _parser(NULL) {
-	if (verbose_option == true)
+	if (debug_option == true)
 		std::cout << BLUE << "\t-> " << NORMAL << "Lead's copy constructor called\n";
 	*this = cpy;
 }
@@ -28,7 +28,7 @@ Lead::~Lead(void) {
 		delete(_lexer);
 	if (_parser != NULL)
 		delete(_parser);
-	if (verbose_option == true)
+	if (debug_option == true)
 		std::cout << BLUE << "\t-> " << NORMAL << "Lead's destructor called\n";
 }
 
@@ -79,6 +79,8 @@ void		Lead::regex(void) {
 	if (std::regex_match(_arg, regexValidChars) == false)						//check valid chars
 		throw BaseException("=> (regex) Error detected.");
 
+	if (verbose_option == true)
+		std::cout << YELLOW << "Input : " << NORMAL << _arg << std::endl;
 	split('=');
 
 	if (std::regex_search(_split[0], regexStart) == false)
@@ -87,7 +89,7 @@ void		Lead::regex(void) {
 		throw BaseException("=> (regex) Error detected in the part to the right of the sign '='.");
 	if (std::regex_search(_split[0], regexEnd) == false)
 		throw BaseException("=> (regex) Error detected in the part to the left of the sign '='.");
-	if (std::regex_search(_split[1], regexEnd) == false)				
+	if (std::regex_search(_split[1], regexEnd) == false)
 		throw BaseException("=> (regex) Error detected in the part to the right of the sign '='.");
 
 	runLexer();
@@ -104,6 +106,11 @@ void		Lead::runLexer(void) {
 	_lexer = new Lexer();
 	_lexer->set_lexical(_split);
 
+	if (debug_option == true) {
+		std::cout << GREEN << "\n\tAfter LEXER" << NORMAL;
+		_lexer->debug_print_lexical();
+	}
+
 	runParser();
 }
 
@@ -111,5 +118,8 @@ void		Lead::runParser(void) {
 	_parser = new Parser();
 	_parser->set_parsing(_lexer->get_lexical());
 
-	_lexer->debug_print_lexical();
+	if (debug_option == true) {
+		std::cout << GREEN << "\n\tAfter PARSER" << NORMAL;
+		_lexer->debug_print_lexical();
+	}
 }

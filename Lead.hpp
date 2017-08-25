@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/17 18:43:13 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/08/24 14:11:43 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/08/25 17:41:28 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ class Lead {
 		void		split(char delim);
 		void		runLexer(void);
 		void		runParser(void);
+		void		runReducer(void);
 
 	private:
 		std::string					_arg;

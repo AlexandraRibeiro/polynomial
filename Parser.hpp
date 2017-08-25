@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/24 14:05:42 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/08/25 17:22:05 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/08/25 17:40:39 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ class Parser {
 		// PARSING _____________________________________________________________
 		void	set_parsing(std::vector<s_scanner> & lexical);
 		size_t	set_booleans(int token, size_t c, std::vector<s_scanner> & lexical);
-		void	set_errorParser(std::string opOrnb, std::string &str);
+		// void	set_errorParser(std::string opOrnb, std::string &str);
 
 	private:
 		bool		_op;
