@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/17 18:43:11 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/08/24 17:31:07 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/08/25 17:25:31 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,9 @@ Lead::~Lead(void) {
 
 Lead	&	Lead::operator=(Lead const & ) {return *this; }
 
+
+
+// READER_______________________________________________________________________
 void		Lead::reader(int ac, char **av) {
 	if (ac == 3 && _arg.compare(av[1]) == 0) {
 		verbose_option = true;
@@ -53,7 +56,7 @@ void		Lead::reader(int ac, char **av) {
 		std::string msg;
 		msg.append(NORMAL);
 		msg.append("\n\tUSAGE\n\t------------\n\t");
-		msg.append("This program takes an argument in parameter,\n\ta polynomial equation (simple or quadratic)");
+		msg.append("This program takes an argument in parameter,\n\ta polynomial equation.");
 		msg.append("\n\tex: 5 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0\n\n\t");
 		msg.append("-v : verbose\n");
 		throw BaseException(msg);
@@ -71,18 +74,20 @@ void		Lead::regex(void) {
 		throw BaseException("=> Error empty string.");
 	_arg.erase(std::remove (_arg.begin(), _arg.end(), ' '), _arg.end()); 		//remove spaces
 
+	std::transform(_arg.begin(), _arg.end(),_arg.begin(), ::toupper);			//toUpper x -> X (bonus)
+
 	if (std::regex_match(_arg, regexValidChars) == false)						//check valid chars
 		throw BaseException("=> (regex) Error detected.");
 
 	split('=');
 
-	if (std::regex_search(_split[0], regexStart) == false)					//check valid chars
+	if (std::regex_search(_split[0], regexStart) == false)
 		throw BaseException("=> (regex) Error detected in the part to the left of the sign '='.");
-	if (std::regex_search(_split[1], regexStart) == false)					//check valid chars
+	if (std::regex_search(_split[1], regexStart) == false)
 		throw BaseException("=> (regex) Error detected in the part to the right of the sign '='.");
-	if (std::regex_search(_split[0], regexEnd) == false)					//check valid chars
+	if (std::regex_search(_split[0], regexEnd) == false)
 		throw BaseException("=> (regex) Error detected in the part to the left of the sign '='.");
-	if (std::regex_search(_split[1], regexEnd) == false)					//check valid chars
+	if (std::regex_search(_split[1], regexEnd) == false)				
 		throw BaseException("=> (regex) Error detected in the part to the right of the sign '='.");
 
 	runLexer();
@@ -106,4 +111,5 @@ void		Lead::runParser(void) {
 	_parser = new Parser();
 	_parser->set_parsing(_lexer->get_lexical());
 
+	_lexer->debug_print_lexical();
 }

@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/23 16:53:26 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/08/24 20:03:50 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/08/25 16:40:40 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ std::vector<s_scanner>	& Lexer::get_lexical(void) {
 
 void					Lexer::debug_print_lexical(void) {
 	size_t c = 0;
-	std::cout << BLUE << "\n\n\t********** LEXER **********\n" << NORMAL;
+	std::cout << BLUE << "\n\n\t****** DEBUG LEXICAL ******\n" << NORMAL;
 	while (c < _lexical.size())
 	{
 		std::cout << "\ttoken = " << _tokenVerbose[_lexical[c].token] << std::endl;
@@ -99,7 +99,7 @@ void					Lexer::debug_print_lexical(void) {
 }
 
 void					Lexer::set_error(char c, std::string &str) {
-	_error.append("=> Error detected after this character '");
+	_error.append("=> (lexer) Error detected after this character '");
 	_error.push_back(c);
 	_error.append("' from this part '");
 	_error.append(str);
@@ -132,7 +132,7 @@ int						Lexer::get_token(char c) const{
 
 // STATIC PUBLIC _______________________________________________________________
 const std::string	Lexer::_tokenVerbose[10] = {
-	"END", "INUM", "RNUM", "XSYMB", "PLUS", "MINUS", "POWER", "MULTI", "DIV", "ERROR", "CONTINUE", "SIGN"
+	"END", "INUM", "RNUM", "XSYMB", "PLUS", "MINUS", "POWER", "MULTI", "DIV", "ERROR"
 };
 
 
@@ -144,9 +144,9 @@ const int			Lexer::_fsm[10][10]= {
 {INUM,			INUM,	RNUM,	ERROR,	END,	END,	END,	END,	END,	ERROR},
 {RNUM,			RNUM,	RNUM,	END,	END,	END,	ERROR,	END,	END,	ERROR},
 {XSYMB,			ERROR,	ERROR,	ERROR,	END,	END,	END,	END,	ERROR,	ERROR},
-{POWER,			END,	END,	END,	END,	END,	ERROR,	ERROR,	ERROR,	ERROR},
 {PLUS,			END,	END,	END,	ERROR,	ERROR,	ERROR,	ERROR,	ERROR,	ERROR},
 {MINUS,			END,	END,	END,	ERROR,	ERROR,	ERROR,	ERROR,	ERROR,	ERROR},
+{POWER,			END,	END,	END,	END,	END,	ERROR,	ERROR,	ERROR,	ERROR},
 {MULTI,			END,	END,	END,	END,	END,	ERROR,	ERROR,	ERROR,	ERROR},
 {DIV,			END,	END,	ERROR,	END,	END,	ERROR,	ERROR,	ERROR,	ERROR},
 {ERROR,			ERROR,	ERROR,	ERROR,	ERROR,	ERROR,	ERROR,	ERROR,	ERROR,	ERROR}
