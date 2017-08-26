@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/24 14:05:42 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/08/25 22:11:11 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/08/26 19:52:28 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,21 +16,17 @@
 # include "BaseException.hpp"
 # include "Lexer.hpp"
 
-struct s_opMultiplications {
-	long double		val1; 	// 1 if [val1]^ || 2 if [val2]^
-	bool			x1;
-	long double		powval1;
-	long double		val2;
-	bool			x2;
-	long double		powval2;
-};
-
 struct s_numbers {
-	long double		val; 	//-5 || 4.2 || 4
+	int				sign; 	//case 3 = X... -> 3 -X = 0
+	long double		val; 	// -5 || 4.2 || 4
 	bool			x;		// true if +X or -X
+	long double		powval; // if + X^5 or -3^2
 };
 
-
+struct s_multi {
+	s_numbers		& nb1;
+	s_numbers		& nb2;
+};
 
 class Parser {
 	public:
@@ -38,18 +34,24 @@ class Parser {
 		Parser(Parser const & cpy);
 		~Parser(void);
 		Parser & operator=(Parser const & );
-		// PARSING 1 ___________________________________________________________
+		// PARSING _____________________________________________________________
 		void	set_parsing(std::vector<s_scanner> & lexical);
-		size_t	set_booleans(int token, size_t c, std::vector<s_scanner> & lexical);
-		// PARSING 2 ___________________________________________________________
-		// void	set_operands();
-		// void	set_errorParser(std::string opOrnb, std::string &str);
+		size_t	set_booleans(int token, int prev_token, size_t c, std::vector<s_scanner> & lexical);
+		void	delete_plus_minus(std::vector<s_scanner> & lexical);
+		// OPERANDS ____________________________________________________________
+		void	fill_vectors();
+		void	set_multi(int n, size_t c, std::vector<s_scanner> & lexical);
+		void	set_numbers(int n, std::string &str);
+		std::vector<s_numbers>	& Parser::get_numbers(void);
+		std::vector<s_multi>	& Parser::get_multi(void);
 
 	private:
 		bool					_op;
 		bool					_nb;
 		int						_sign;
-		// std::vector<s_operands>	_operands;
+		int						_prev_token;
+		std::vector<s_multi>	_multi;
+		std::vector<s_numbers>	_numbers;
 
 };
 

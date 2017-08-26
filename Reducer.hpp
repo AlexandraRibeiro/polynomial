@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 17:41:13 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/08/25 20:31:43 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/08/26 14:27:15 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define REDUCER_H
 
 # include "BaseException.hpp"
-# include "lexer.hpp"
+# include "Lexer.hpp"
 
 
 class Reducer {
@@ -29,7 +29,7 @@ class Reducer {
 		// std::vector<long double>					_nb_plus_minus;
 		// std::vector<long double>					_multipleX;
 		// std::vector<long double>					_powerX;
-		// std::vector<long double><long double>		_powerNb;
+		// std::vector<long double><long double>	_powerNb;
 };
 
 

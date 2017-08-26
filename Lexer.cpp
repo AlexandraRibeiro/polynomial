@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/23 16:53:26 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/08/25 22:39:09 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/08/26 14:31:15 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,7 @@ const int			Lexer::_fsm[10][10]= {
 {END,			INUM,	RNUM,	XSYMB,	PLUS,	MINUS,	POWER,	MULTI,	DIV,	ERROR},
 /* STATE */
 {INUM,			INUM,	RNUM,	ERROR,	END,	END,	END,	END,	END,	ERROR},
-{RNUM,			RNUM,	RNUM,	END,	END,	END,	ERROR,	END,	END,	ERROR},
+{RNUM,			RNUM,	ERROR,	END,	END,	END,	ERROR,	END,	END,	ERROR},
 {XSYMB,			ERROR,	ERROR,	ERROR,	END,	END,	END,	END,	ERROR,	ERROR},
 {PLUS,			END,	END,	END,	ERROR,	ERROR,	ERROR,	ERROR,	ERROR,	ERROR},
 {MINUS,			END,	END,	END,	ERROR,	ERROR,	ERROR,	ERROR,	ERROR,	ERROR},
