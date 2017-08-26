@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/17 18:39:33 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/08/25 17:52:03 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/08/25 23:00:13 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@
 # define MAGENTA	"\033[35;1m"
 # define GREEN		"\033[32;1m"
 # define NORMAL		"\033[0m"
+
+void	split(char delim, std::string &str, std::vector<std::string> &split);
 
 
 extern bool		verbose_option;

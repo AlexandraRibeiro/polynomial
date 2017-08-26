@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/17 18:43:13 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/08/25 17:41:28 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/08/25 23:01:31 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include "Lexer.hpp"
 # include "Parser.hpp"
+# include "Reducer.hpp"
 
 class Lead {
 
@@ -25,7 +26,7 @@ class Lead {
 		Lead	&	operator=(Lead const &); //ajouter rhs ?
 		void		reader(int ac, char **av);
 		void		regex(void);
-		void		split(char delim);
+		// void		split(char delim);
 		void		runLexer(void);
 		void		runParser(void);
 		void		runReducer(void);
@@ -35,6 +36,7 @@ class Lead {
 		std::vector<std::string>	_split;
 		Lexer						*_lexer;
 		Parser						*_parser;
+		Reducer						*_reducer;
 };
 
 #endif

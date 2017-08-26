@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/24 14:05:34 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/08/25 17:51:35 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/08/25 22:54:06 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ size_t		Parser::set_booleans(int token, size_t c, std::vector<s_scanner> & lexic
 		_sign = -1;
 		c--;
 	}
+	/* INUM || RNUM || XSYMB */
 	else if (token < 4 && _nb == false) {
 		_op = false;
 		_nb = true;
@@ -68,12 +69,29 @@ size_t		Parser::set_booleans(int token, size_t c, std::vector<s_scanner> & lexic
 			lexical[c].lexeme.insert(0,1,'-');
 		_sign = 1;
 	}
+	/* PLUS || MINUS || POWER || MULTI || DIV */
 	else if (token > 3 && _op == false) {
 		_op = true;
 		_nb = false;
 	}
 	return c;
 }
+
+//Parser doit verifier si rnum un seul point
+
+
+// void		Parser::set_operands() {
+// 	size_t c = 0;
+// 	std::string line = "";
+// 	//forcement par pair ok verifie par le parser donc ok
+// 	while ( c < lexical.size()) {
+// 		if (c != 0 && (lexical[c].original_line).compare(line) != 0) {
+//
+// 		}
+// 		line = lexical[c].original_line;
+// 		if (lexical[c].token < 4)
+// 	}
+// }
 
 // void		Parser::set_errorParser(std::string opOrnb, std::string &str) {
 // 	_errorParser.append("=> (parser) Error missing ");

@@ -6,7 +6,7 @@
 #    By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/03/20 19:26:31 by aribeiro          #+#    #+#              #
-#    Updated: 2017/08/24 14:12:25 by aribeiro         ###   ########.fr        #
+#    Updated: 2017/08/25 23:01:58 by aribeiro         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,6 +16,8 @@ SRC = 	BaseException.cpp \
 		Lead.cpp \
 		Lexer.cpp \
 		Parser.cpp \
+		Reducer.cpp \
+		tools.cpp \
 		main.cpp
 
 OBJ = $(SRC:.cpp=.o)

@@ -6,28 +6,30 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/17 18:43:11 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/08/25 18:01:39 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/08/25 23:01:25 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Lead.hpp"
 
-Lead::Lead(void) : _arg("-v"), _lexer(NULL), _parser(NULL) {
+Lead::Lead(void) : _arg("-v"), _lexer(NULL), _parser(NULL), _reducer(NULL) {
 	if (debug_option == true)
 		std::cout << BLUE << "\t-> " << NORMAL << "Lead's constructor called\n";
 }
 
-Lead::Lead(Lead const & cpy) : _arg("-v"), _lexer(NULL), _parser(NULL) {
+Lead::Lead(Lead const & cpy) : _arg("-v"), _lexer(NULL), _parser(NULL), _reducer(NULL) {
 	if (debug_option == true)
 		std::cout << BLUE << "\t-> " << NORMAL << "Lead's copy constructor called\n";
 	*this = cpy;
 }
 
 Lead::~Lead(void) {
-	if (_lexer != NULL)
-		delete(_lexer);
+	if (_reducer != NULL)
+		delete(_reducer);
 	if (_parser != NULL)
 		delete(_parser);
+	if (_lexer != NULL)
+		delete(_lexer);
 	if (debug_option == true)
 		std::cout << BLUE << "\t-> " << NORMAL << "Lead's destructor called\n";
 }
@@ -66,9 +68,9 @@ void		Lead::reader(int ac, char **av) {
 
 
 void		Lead::regex(void) {
-	std::regex regexValidChars("[0-9X+\\-\\^\\*\\.\\/]+[=]{1}[0-9X+\\-\\^\\*\\.\\/]+");
-	std::regex regexStart("^[0-9\\-+\\.]");
-	std::regex regexEnd("[0-9\\.]$");
+	std::regex regexValidChars("[0-9X+\\-\\^\\*\\.]+[=]{1}[0-9X+\\-\\^\\*\\.]+");
+	std::regex regexStart("^[0-9\\-+\\.X]");
+	std::regex regexEnd("[0-9\\.X]$");
 
 	if (_arg.compare("") == 0)
 		throw BaseException("=> Error empty string.");
@@ -77,30 +79,31 @@ void		Lead::regex(void) {
 	std::transform(_arg.begin(), _arg.end(),_arg.begin(), ::toupper);			//toUpper x -> X (bonus)
 
 	if (std::regex_match(_arg, regexValidChars) == false)						//check valid chars
-		throw BaseException("=> (regex) Error detected.");
+		throw BaseException("=> (regex) Error wrong character or format detected.");
 
 	if (verbose_option == true)
 		std::cout << YELLOW << "Input : " << NORMAL << _arg << std::endl;
-	split('=');
+
+	split('=', _arg, _split);
 
 	if (std::regex_search(_split[0], regexStart) == false)
-		throw BaseException("=> (regex) Error detected in the part to the left of the sign '='.");
-	if (std::regex_search(_split[1], regexStart) == false)
-		throw BaseException("=> (regex) Error detected in the part to the right of the sign '='.");
+		throw BaseException("=> (regex) Error wrong first character detected (to the left of the equal sign).");
 	if (std::regex_search(_split[0], regexEnd) == false)
-		throw BaseException("=> (regex) Error detected in the part to the left of the sign '='.");
+		throw BaseException("=> (regex) Error wrong last character detected (to the left of the equal sign).");
+	if (std::regex_search(_split[1], regexStart) == false)
+		throw BaseException("=> (regex) Error wrong first character detected (to the right of the equal sign).");
 	if (std::regex_search(_split[1], regexEnd) == false)
-		throw BaseException("=> (regex) Error detected in the part to the right of the sign '='.");
+		throw BaseException("=> (regex) Error wrong last character detected (to the right of the equal sign).");
 
 	runLexer();
 }
 
-void		Lead::split(char delim) {
-	std::stringstream ss(_arg);
-	std::string token;
-	while (std::getline(ss, token, delim))
-		_split.push_back(token);
-}
+// void		Lead::split(char delim) {
+// 	std::stringstream ss(_arg);
+// 	std::string token;
+// 	while (std::getline(ss, token, delim))
+// 		_split.push_back(token);
+// }
 
 void		Lead::runLexer(void) {
 	_lexer = new Lexer();
@@ -122,4 +125,11 @@ void		Lead::runParser(void) {
 		std::cout << GREEN << "\n\tAfter PARSER" << NORMAL;
 		_lexer->debug_print_lexical();
 	}
+
+	runReducer();
+}
+
+void		Lead::runReducer(void) {
+	_reducer = new Reducer();
+	std::cout << "in run reducer()\n";
 }
