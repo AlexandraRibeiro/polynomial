@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/24 14:05:34 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/08/26 19:55:10 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/08/26 22:26:16 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,10 @@ void		Parser::set_parsing(std::vector<s_scanner> & lexical) {
 		c++;
 	}
 	delete_plus_minus(lexical);
+	fill_operands(lexical);
+//***********************************************
+	debug_print_operands();
+//***********************************************
 }
 
 size_t		Parser::set_booleans(int token, int prev_token, size_t c, std::vector<s_scanner> & lexical) {
@@ -97,37 +101,65 @@ void		Parser::delete_plus_minus(std::vector<s_scanner> & lexical) {
 
 
 // OPERANDS ____________________________________________________________________
-void		Parser::fill_vectors() {
-	// _sign = 1;
-	// size_t 		c = 0;
-	// std::string line = "";
-	// int			m = 0;
-	// int			n = 0;
-	//
-	// while (c < lexical.size()) {
-	// 	if (c != 0 && (lexical[c].original_line).compare(line) != 0) {
-	// 		_sign = -1;
-	// 	}
-	// 	if (lexical[c].token < 3)
-	// 		n = set_numbers(n, lexical[c].lexeme);
-	//
-	// 	m = set_multi(m, c, lexical);
-	// }
+void		Parser::fill_operands(std::vector<s_scanner> & lexical) {
+	size_t i = 0;
+	size_t j = -1;
+	int pos = 1;
+	init_operands(lexical);
+	while (i < lexical.size()) {
+		if (lexical[i].token < 3 && pos == 1) {									//INUM || RNUM
+			j++;
+			_operands[j].ld1 = stringToLong(lexical[i].lexeme);
+		}
+		else if (lexical[i].token < 3 && pos == 2) {
+			_operands[j].ld2 = stringToLong(lexical[i].lexeme);
+			pos--;
+			j++;
+		}
+		else if (lexical[i].token == XSYMB && pos == 1) {
+			j++;
+			_operands[j].s1.append(lexical[j].lexeme);
+		}
+		else if (lexical[i].token == XSYMB && pos == 2) {
+			_operands[j].s2.append(lexical[j].lexeme);
+			pos--;
+			j++;
+		}
+		else if (lexical[i].token == MULTI)
+			pos++;
+		// else if (lexical[i].token == POWER)
+		// 	fill_operands_power()
+		i++;
+	}
 
 }
 
-void		Parser::set_multi(int n, size_t c, std::vector<s_scanner> & lexical) {
-
+void		Parser::init_operands(std::vector<s_scanner> & lexical) {
+	size_t c = 0;
+	int j = 0;
+	while (c < lexical.size()) {
+		_operands.push_back(s_operands());
+		_operands[j].ld1 = 1;
+		_operands[j].ld2 = 1;
+		// _operands[j].s1 = NULL;
+		// _operands[j].s2 = NULL;
+		c++;
+		j++;
+	}
 }
 
-int			Parser::set_numbers(int n, std::string &str) {
-//*_sign pour inverser
-}
 
-std::vector<s_numbers>	& Parser::get_numbers(void) {
-	return _numbers;
-}
-
-std::vector<s_multi>	& Parser::get_multi(void) {
-	return _multi;
+void		Parser::debug_print_operands(void) {
+	size_t c = 0;
+	std::cout << BLUE << "\n\n\t****** DEBUG OPERANDS ******\n" << NORMAL;
+	while (c < _operands.size())
+	{
+		std::cout << "\tld1 = " << _operands[c].ld1 << std::endl;
+		std::cout << "\tld2 = " << _operands[c].ld2 << std::endl;
+		std::cout << "\ts1 = '" << _operands[c].s1 << "'\n";
+		std::cout << "\ts2 = '" << _operands[c].s2 << "'\n";
+		std::cout << BLUE << "\t___________________________\n" << NORMAL;
+		c++;
+	}
+	std::cout << "\n";
 }
