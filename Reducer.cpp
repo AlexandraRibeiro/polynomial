@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 17:41:10 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/08/28 23:45:26 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/08/29 00:19:03 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ void		Reducer::calculate_powerNum(std::vector<s_scanner> & lexical) {
 	set_allNum(lexical);
 }
 
+
 void		Reducer::calculate_multiNum(std::vector<s_scanner> & lexical) {
 	size_t c = 0;
 	while (c < lexical.size()) {
@@ -98,10 +99,14 @@ void		Reducer::set_allNum(std::vector<s_scanner> & lexical) {
 			_sign = -1;
 		if (lexical[c].token == RNUM)
 			_allNum.push_back(stringToLong(lexical[c].lexeme) * _sign);
-		if (lexical[c].token == RNUM && c - 1 > 0 && lexical[c - 1].token == MULTI)
+		if (lexical[c].token == RNUM && c - 1 > 0 && lexical[c - 1].token == MULTI) {
+			lexical[c].token = COEFF;
 			_allNum.pop_back();
-		else if (lexical[c].token == MULTI && lexical[c - 1].token == RNUM)
+		}
+		else if (lexical[c].token == MULTI && lexical[c - 1].token == RNUM) {
+			lexical[c - 1].token = COEFF;
 			_allNum.pop_back();
+		}
 		line = lexical[c].original_line;
 		c++;
 	}
@@ -137,3 +142,10 @@ void		Reducer::debug_print_allNum(void) const {
 	}
 	std::cout << BLUE << "\t___________________________\n\n" << NORMAL;
 }
+
+
+
+// X POWER _____________________________________________________________________
+// void		Reducer::search_powerX(std::vector<s_scanner> & lexical) {
+//
+// }
