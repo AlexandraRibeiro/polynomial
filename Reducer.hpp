@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 17:41:13 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/08/29 00:18:17 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/08/29 01:19:23 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,27 +17,37 @@
 # include "Lexer.hpp"
 
 
+struct s_Xpower {
+	long double					power;
+	std::vector<long double> 	allCoeff;
+	int							sign;
+};
+
 class Reducer {
 	public:
-		Reducer(void);
+		Reducer(std::vector<s_scanner> & lex);
 		Reducer(Reducer const & cpy);
 		~Reducer(void);
 		Reducer & operator=(Reducer const & );
 		// CALCULATE NUM _______________________________________________________
-		void	calculate_powerNum(std::vector<s_scanner> & lexical);
-		void	calculate_multiNum(std::vector<s_scanner> & lexical);
-		void	set_allNum(std::vector<s_scanner> & lexical);
+		void	calculate_powerNum(void);
+		void	calculate_multiNum(void);
+		void	set_allNum(void);
 		void	calculate_allNum(void);
 		void	debug_print_allNum(void) const;
 		// X POWER _____________________________________________________________
-		void	search_powerX(std::vector<s_scanner> & lexical);
+		void	search_powerX();
+		void	push_Xpower(long double power, size_t c, int j)
+		// GETTER ______________________________________________________________
+		std::vector<s_scanner>	& get_lexical(void) const;
 
 	private:
-		std::vector<long double>	_allNum;
-		int							_sign;
-		long double					_ld1;
-		long double					_ld2;
-		// long double					_pow[4][];
+		std::vector<long double>		_allNum;
+		int								_sign;
+		long double						_ld1;
+		long double						_ld2;
+		std::vector<s_Xpower>			_Xpow;
+		std::vector<s_scanner>			&lexical;
 };
 
 

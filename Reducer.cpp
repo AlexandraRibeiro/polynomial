@@ -6,19 +6,19 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 17:41:10 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/08/29 00:19:03 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/08/29 01:24:35 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Reducer.hpp"
 
 
-Reducer::Reducer(void) {
+Reducer::Reducer(std::vector<s_scanner> & lex) : lexical(lex)  {
 	if (debug_option == true)
 		std::cout << BLUE << "\t-> " << NORMAL << "Reducer's constructor called\n";
 }
 
-Reducer::Reducer(Reducer const & cpy) {
+Reducer::Reducer(Reducer const & cpy) : lexical(this->get_lexical()) {
 	*this = cpy;
 }
 
@@ -27,14 +27,15 @@ Reducer::~Reducer(void) {
 		std::cout << BLUE << "\t-> " << NORMAL << "Reducer's destructor called\n";
 }
 
-Reducer &		Reducer::operator=(Reducer const & ) {
+Reducer &		Reducer::operator=(Reducer const & rhs) {
+	lexical = rhs.get_lexical();
 	return *this;
 }
 
 
 
 // CALCULATE NUM _______________________________________________________________
-void		Reducer::calculate_powerNum(std::vector<s_scanner> & lexical) {
+void		Reducer::calculate_powerNum(void) {
 	size_t c = 0;
 	long double result;
 	while (c < lexical.size()) {
@@ -67,12 +68,12 @@ void		Reducer::calculate_powerNum(std::vector<s_scanner> & lexical) {
 		c++;
 	}
 
-	calculate_multiNum(lexical);
-	set_allNum(lexical);
+	calculate_multiNum();
+	set_allNum();
 }
 
 
-void		Reducer::calculate_multiNum(std::vector<s_scanner> & lexical) {
+void		Reducer::calculate_multiNum(void) {
 	size_t c = 0;
 	while (c < lexical.size()) {
 		if (lexical[c].token == MULTI && lexical[c-1].token < 3 && lexical[c+1].token < 3) {
@@ -90,7 +91,7 @@ void		Reducer::calculate_multiNum(std::vector<s_scanner> & lexical) {
 }
 
 
-void		Reducer::set_allNum(std::vector<s_scanner> & lexical) {
+void		Reducer::set_allNum(void) {
 	size_t c = 0;
 	std::string line = "";
 	_sign = 1;
@@ -146,6 +147,39 @@ void		Reducer::debug_print_allNum(void) const {
 
 
 // X POWER _____________________________________________________________________
-// void		Reducer::search_powerX(std::vector<s_scanner> & lexical) {
-//
-// }
+void		Reducer::search_powerX(std::vector<s_scanner> & lexical) {
+	size_t c = 0;
+	int j = -1;
+	_sign = 1;
+	std::string line = "";
+	long double power;
+	while (c < lexical.size()) {
+		if (c != 0 && (lexical[c].original_line).compare(line) != 0)
+			_sign = -1;
+		if (lexical[c].token == POWER) {
+			j++;
+			_Xpow.push_back(s_Xpower());
+			power = stringToLong(lexical[c].lexeme);
+			lexical[c].lexeme == longToString(power);							// just in case throw exception
+			push_Xpower(power, c, j);
+		}
+		line = lexical[c].original_line;
+		c++;
+	}
+}
+
+
+void		Reducer::push_Xpower(long double power, size_t c, int j) {
+	_Xpow[j].power = power;
+	_Xpow[j].sign = _sign;
+
+
+	//attention X sans puissance
+}
+
+
+
+// GETTER ______________________________________________________________________
+std::vector<s_scanner>	&	Reducer::get_lexical(void) const {
+	return lexical;
+}
