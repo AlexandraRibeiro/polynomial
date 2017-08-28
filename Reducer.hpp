@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 17:41:13 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/08/29 01:19:23 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/08/29 01:41:59 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ class Reducer {
 		void	debug_print_allNum(void) const;
 		// X POWER _____________________________________________________________
 		void	search_powerX();
-		void	push_Xpower(long double power, size_t c, int j)
+		size_t	push_Xpower(size_t c, int j)
 		// GETTER ______________________________________________________________
 		std::vector<s_scanner>	& get_lexical(void) const;
 

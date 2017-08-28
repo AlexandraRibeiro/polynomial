@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 17:41:10 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/08/29 01:24:35 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/08/29 01:51:13 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,16 +152,13 @@ void		Reducer::search_powerX(std::vector<s_scanner> & lexical) {
 	int j = -1;
 	_sign = 1;
 	std::string line = "";
-	long double power;
 	while (c < lexical.size()) {
 		if (c != 0 && (lexical[c].original_line).compare(line) != 0)
 			_sign = -1;
-		if (lexical[c].token == POWER) {
+		if (lexical[c].token == COEFF || lexical[c] == XSYMB) {
 			j++;
 			_Xpow.push_back(s_Xpower());
-			power = stringToLong(lexical[c].lexeme);
-			lexical[c].lexeme == longToString(power);							// just in case throw exception
-			push_Xpower(power, c, j);
+			c = push_Xpower(c, j);
 		}
 		line = lexical[c].original_line;
 		c++;
@@ -169,11 +166,24 @@ void		Reducer::search_powerX(std::vector<s_scanner> & lexical) {
 }
 
 
-void		Reducer::push_Xpower(long double power, size_t c, int j) {
-	_Xpow[j].power = power;
+void		Reducer::push_Xpower(size_t c, int j) {
+	_Xpow[j].power = 1;															//by default
 	_Xpow[j].sign = _sign;
-
-
+	while (c < lexical.size()) {
+		if (lexical[c].token == COEFF) {
+			_ld1 = stringToLong(lexical[c].lexeme);
+			lexical[c].lexeme = longToString(_ld1);
+			_Xpow[j].allCoeff.push_back(_ld1);
+			c++;
+		}
+		else if (lexical[c].token == MULTI) {
+			c++;
+		}
+		else if (l)
+		else
+			break;
+	}
+	return c;
 	//attention X sans puissance
 }
 
