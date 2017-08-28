@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/17 18:43:11 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/08/25 23:01:25 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/08/28 16:42:09 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,8 @@ void		Lead::reader(int ac, char **av) {
 
 void		Lead::regex(void) {
 	std::regex regexValidChars("[0-9X+\\-\\^\\*\\.]+[=]{1}[0-9X+\\-\\^\\*\\.]+");
-	std::regex regexStart("^[0-9\\-+\\.X]");
-	std::regex regexEnd("[0-9\\.X]$");
+
+	std::regex regexPower("\\^[0-9]+\\^[0-9]+");
 
 	if (_arg.compare("") == 0)
 		throw BaseException("=> Error empty string.");
@@ -79,12 +79,22 @@ void		Lead::regex(void) {
 	std::transform(_arg.begin(), _arg.end(),_arg.begin(), ::toupper);			//toUpper x -> X (bonus)
 
 	if (std::regex_match(_arg, regexValidChars) == false)						//check valid chars
-		throw BaseException("=> (regex) Error wrong character or format detected.");
+		throw BaseException("=> (regex) Error wrong character or format detected (equal sign).");
 
 	if (verbose_option == true)
 		std::cout << YELLOW << "Input : " << NORMAL << _arg << std::endl;
 
+	if (std::regex_search(_arg, regexPower) == true)
+		throw BaseException("=> (regex) Error wrong format detected after '^'.");
+
 	split('=', _arg, _split);
+	regexAfterSplit();
+	runLexer();
+}
+
+void		Lead::regexAfterSplit(void) {
+	std::regex regexStart("^[0-9\\-+\\.X]");
+	std::regex regexEnd("[0-9\\.X]$");
 
 	if (std::regex_search(_split[0], regexStart) == false)
 		throw BaseException("=> (regex) Error wrong first character detected (to the left of the equal sign).");
@@ -94,16 +104,7 @@ void		Lead::regex(void) {
 		throw BaseException("=> (regex) Error wrong first character detected (to the right of the equal sign).");
 	if (std::regex_search(_split[1], regexEnd) == false)
 		throw BaseException("=> (regex) Error wrong last character detected (to the right of the equal sign).");
-
-	runLexer();
 }
-
-// void		Lead::split(char delim) {
-// 	std::stringstream ss(_arg);
-// 	std::string token;
-// 	while (std::getline(ss, token, delim))
-// 		_split.push_back(token);
-// }
 
 void		Lead::runLexer(void) {
 	_lexer = new Lexer();
@@ -126,10 +127,10 @@ void		Lead::runParser(void) {
 		_lexer->debug_print_lexical();
 	}
 
-	runReducer();
+	// runReducer();
 }
 
-void		Lead::runReducer(void) {
-	_reducer = new Reducer();
-	std::cout << "in run reducer()\n";
-}
+// void		Lead::runReducer(void) {
+// 	_reducer = new Reducer();
+// 	std::cout << "in run reducer()\n";
+// }

@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/23 16:53:26 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/08/26 14:31:15 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/08/28 16:45:08 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ void					Lexer::debug_print_lexical(void) {
 		std::cout << "\ttoken = " << _tokenVerbose[_lexical[c].token] << std::endl;
 		std::cout << "\tlexeme = \"" << _lexical[c].lexeme << "\"\n";
 		std::cout << "\toriginal line = \"" << _lexical[c].original_line << "\"\n";
+		std::cout << "\tld = " << _lexical[c].ld << std::endl;
 		std::cout << BLUE << "\t___________________________\n" << NORMAL;
 		c++;
 	}
@@ -144,7 +145,7 @@ const int			Lexer::_fsm[10][10]= {
 {XSYMB,			ERROR,	ERROR,	ERROR,	END,	END,	END,	END,	ERROR,	ERROR},
 {PLUS,			END,	END,	END,	ERROR,	ERROR,	ERROR,	ERROR,	ERROR,	ERROR},
 {MINUS,			END,	END,	END,	ERROR,	ERROR,	ERROR,	ERROR,	ERROR,	ERROR},
-{POWER,			END,	END,	ERROR,	END,	END,	ERROR,	ERROR,	ERROR,	ERROR},
+{POWER,			END,	ERROR,	ERROR,	ERROR,	ERROR,	ERROR,	ERROR,	ERROR,	ERROR},
 {MULTI,			END,	END,	END,	END,	END,	ERROR,	ERROR,	ERROR,	ERROR},
 {DIV,			END,	END,	ERROR,	END,	END,	ERROR,	ERROR,	ERROR,	ERROR},
 {ERROR,			ERROR,	ERROR,	ERROR,	ERROR,	ERROR,	ERROR,	ERROR,	ERROR,	ERROR}

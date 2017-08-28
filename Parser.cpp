@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/24 14:05:34 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/08/26 22:26:16 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/08/28 17:41:30 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,9 @@ void		Parser::set_parsing(std::vector<s_scanner> & lexical) {
 		c++;
 	}
 	delete_plus_minus(lexical);
-	fill_operands(lexical);
-//***********************************************
-	debug_print_operands();
-//***********************************************
+	calculate_powerNum(lexical);
+	calculate_multiNum(lexical);
+
 }
 
 size_t		Parser::set_booleans(int token, int prev_token, size_t c, std::vector<s_scanner> & lexical) {
@@ -101,65 +100,51 @@ void		Parser::delete_plus_minus(std::vector<s_scanner> & lexical) {
 
 
 // OPERANDS ____________________________________________________________________
-void		Parser::fill_operands(std::vector<s_scanner> & lexical) {
-	size_t i = 0;
-	size_t j = -1;
-	int pos = 1;
-	init_operands(lexical);
-	while (i < lexical.size()) {
-		if (lexical[i].token < 3 && pos == 1) {									//INUM || RNUM
-			j++;
-			_operands[j].ld1 = stringToLong(lexical[i].lexeme);
-		}
-		else if (lexical[i].token < 3 && pos == 2) {
-			_operands[j].ld2 = stringToLong(lexical[i].lexeme);
-			pos--;
-			j++;
-		}
-		else if (lexical[i].token == XSYMB && pos == 1) {
-			j++;
-			_operands[j].s1.append(lexical[j].lexeme);
-		}
-		else if (lexical[i].token == XSYMB && pos == 2) {
-			_operands[j].s2.append(lexical[j].lexeme);
-			pos--;
-			j++;
-		}
-		else if (lexical[i].token == MULTI)
-			pos++;
-		// else if (lexical[i].token == POWER)
-		// 	fill_operands_power()
-		i++;
-	}
-
-}
-
-void		Parser::init_operands(std::vector<s_scanner> & lexical) {
+void		Parser::calculate_powerNum(std::vector<s_scanner> & lexical) {
 	size_t c = 0;
-	int j = 0;
+	long double ld1;
+	long double ld2;
+	long double result;
+	int sign = 1;
 	while (c < lexical.size()) {
-		_operands.push_back(s_operands());
-		_operands[j].ld1 = 1;
-		_operands[j].ld2 = 1;
-		// _operands[j].s1 = NULL;
-		// _operands[j].s2 = NULL;
+		if (lexical[c].token == POWER && lexical[c-1].token != XSYMB) {
+			ld1 = stringToLong(lexical[c-1].lexeme);
+			result = ld1;
+			ld2 = stringToLong(lexical[c+1].lexeme);
+			if (ld1 < 0 && ld2 != 1)
+				sign = -1;
+			if (ld2 == 0)
+				result = 1;
+			while (ld2 > 1) {
+				result = ld1 * result;
+				ld2--;
+			}
+			lexical[c + 1].ld = result * sign;
+			lexical[c + 1].token = RNUM;
+			lexical[c + 1].lexeme = "";
+			lexical.erase(lexical.begin() + (c - 1));
+			lexical.erase(lexical.begin() + (c - 1));
+			c--;
+		}
 		c++;
-		j++;
 	}
 }
 
-
-void		Parser::debug_print_operands(void) {
+void		Parser::calculate_multiNum(std::vector<s_scanner> & lexical) {
 	size_t c = 0;
-	std::cout << BLUE << "\n\n\t****** DEBUG OPERANDS ******\n" << NORMAL;
-	while (c < _operands.size())
-	{
-		std::cout << "\tld1 = " << _operands[c].ld1 << std::endl;
-		std::cout << "\tld2 = " << _operands[c].ld2 << std::endl;
-		std::cout << "\ts1 = '" << _operands[c].s1 << "'\n";
-		std::cout << "\ts2 = '" << _operands[c].s2 << "'\n";
-		std::cout << BLUE << "\t___________________________\n" << NORMAL;
+	long double ld1;
+	long double ld2;
+	while (c < lexical.size()) {
+		if (lexical[c].token == MULTI && lexical[c-1].token != XSYMB && lexical[c+1].token != XSYMB) {
+			ld1 = stringToLong(lexical[c-1].lexeme);
+			ld2 = stringToLong(lexical[c+1].lexeme);
+			lexical[c + 1].ld = ld1 * ld2;
+			lexical[c + 1].token = RNUM;
+			lexical[c + 1].lexeme = numToString(lexical[c + 1].ld);
+			lexical.erase(lexical.begin() + (c - 1));
+			lexical.erase(lexical.begin() + (c - 1));
+			c--;
+		}
 		c++;
 	}
-	std::cout << "\n";
 }

@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/17 18:43:13 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/08/25 23:01:31 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/08/28 15:03:18 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ class Lead {
 		Lead	&	operator=(Lead const &); //ajouter rhs ?
 		void		reader(int ac, char **av);
 		void		regex(void);
-		// void		split(char delim);
+		void		regexAfterSplit(void);
 		void		runLexer(void);
 		void		runParser(void);
 		void		runReducer(void);

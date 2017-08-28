@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/17 18:39:33 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/08/26 22:13:53 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/08/28 17:39:02 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,12 @@
 # define GREEN		"\033[32;1m"
 # define NORMAL		"\033[0m"
 
+//precision long double -> stringToLong
+# define DB_PRECIS	std::numeric_limits<double>::digits10
+
 void			split(char delim, std::string &str, std::vector<std::string> &split);
 long double		stringToLong(std::string & str);
+std::string		numToString(long double ld);
 
 extern bool		verbose_option;
 extern bool		debug_option;

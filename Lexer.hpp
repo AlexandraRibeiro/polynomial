@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/23 16:53:30 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/08/25 22:18:13 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/08/28 16:43:44 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ struct s_scanner {
 	int			token;
 	std::string	lexeme;
 	std::string original_line;
+	long double	ld;
 };
 
 class Lexer {
