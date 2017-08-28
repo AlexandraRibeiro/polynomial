@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 22:55:25 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/08/28 17:36:45 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/08/28 23:08:11 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,13 @@ void			split(char delim, std::string &str, std::vector<std::string> &split) {
 long double		stringToLong(std::string & str) {
 	std::stringstream ss(str);
 	long double result ;
-	return ss >> result ? result : throw BaseException("=> (parser) Error wrong value -> stringToLong.");
+	return ss >> result ? result : throw BaseException("=> (reducer) Error wrong value -> stringToLong.");
 }
 
-std::string numToString(long double ld) {
+std::string longToString(long double ld) {
 	std::ostringstream oss;
-	return oss << std::setprecision(DB_PRECIS) << ld ? oss.str() : throw BaseException("=> (parser) Error wrong value -> numToString.");
+	oss << std::setprecision(DB_PRECIS) << ld;
+	if (oss.str().compare("inf") == 0 || oss.str().compare("-inf") == 0)
+	 	throw BaseException("=> (reducer) Error one value is too high, detected by longToString().");
+	return oss.str();
 }

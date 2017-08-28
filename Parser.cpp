@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/24 14:05:34 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/08/28 17:41:30 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/08/28 23:10:15 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,7 @@ void		Parser::set_parsing(std::vector<s_scanner> & lexical) {
 		_prev_token = token;
 		c++;
 	}
-	delete_plus_minus(lexical);
-	calculate_powerNum(lexical);
-	calculate_multiNum(lexical);
-
+	clean_lexical(lexical);
 }
 
 size_t		Parser::set_booleans(int token, int prev_token, size_t c, std::vector<s_scanner> & lexical) {
@@ -86,65 +83,15 @@ size_t		Parser::set_booleans(int token, int prev_token, size_t c, std::vector<s_
 	return c;
 }
 
-void		Parser::delete_plus_minus(std::vector<s_scanner> & lexical) {
+void		Parser::clean_lexical(std::vector<s_scanner> & lexical) {
 	size_t c = 0;
 	while (c < lexical.size()) {
 		if (lexical[c].token == PLUS || lexical[c].token == MINUS) {
 			lexical.erase(lexical.begin() + (c));
 			c--;
 		}
-		c++;
-	}
-}
-
-
-
-// OPERANDS ____________________________________________________________________
-void		Parser::calculate_powerNum(std::vector<s_scanner> & lexical) {
-	size_t c = 0;
-	long double ld1;
-	long double ld2;
-	long double result;
-	int sign = 1;
-	while (c < lexical.size()) {
-		if (lexical[c].token == POWER && lexical[c-1].token != XSYMB) {
-			ld1 = stringToLong(lexical[c-1].lexeme);
-			result = ld1;
-			ld2 = stringToLong(lexical[c+1].lexeme);
-			if (ld1 < 0 && ld2 != 1)
-				sign = -1;
-			if (ld2 == 0)
-				result = 1;
-			while (ld2 > 1) {
-				result = ld1 * result;
-				ld2--;
-			}
-			lexical[c + 1].ld = result * sign;
-			lexical[c + 1].token = RNUM;
-			lexical[c + 1].lexeme = "";
-			lexical.erase(lexical.begin() + (c - 1));
-			lexical.erase(lexical.begin() + (c - 1));
-			c--;
-		}
-		c++;
-	}
-}
-
-void		Parser::calculate_multiNum(std::vector<s_scanner> & lexical) {
-	size_t c = 0;
-	long double ld1;
-	long double ld2;
-	while (c < lexical.size()) {
-		if (lexical[c].token == MULTI && lexical[c-1].token != XSYMB && lexical[c+1].token != XSYMB) {
-			ld1 = stringToLong(lexical[c-1].lexeme);
-			ld2 = stringToLong(lexical[c+1].lexeme);
-			lexical[c + 1].ld = ld1 * ld2;
-			lexical[c + 1].token = RNUM;
-			lexical[c + 1].lexeme = numToString(lexical[c + 1].ld);
-			lexical.erase(lexical.begin() + (c - 1));
-			lexical.erase(lexical.begin() + (c - 1));
-			c--;
-		}
+		else if (lexical[c].token == INUM)
+			lexical[c].token = RNUM;
 		c++;
 	}
 }
