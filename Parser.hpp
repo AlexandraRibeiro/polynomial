@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/24 14:05:42 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/08/28 23:09:55 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/08/29 20:40:28 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@ class Parser {
 		Parser & operator=(Parser const & );
 		// PARSING _____________________________________________________________
 		void	set_parsing(std::vector<s_scanner> & lexical);
-		size_t	set_booleans(int token, int prev_token, size_t c, std::vector<s_scanner> & lexical);
-		void	clean_lexical(std::vector<s_scanner> & lexical);
+		size_t	set_booleans(int token, size_t c, std::vector<s_scanner> & lexical);
+		// void	clean_lexical(std::vector<s_scanner> & lexical);
 
 
 	private:
@@ -33,8 +33,6 @@ class Parser {
 		bool						_nb;
 		int							_sign;
 		int							_prev_token;
-
-		// std::vector<long double>	_all
 
 };
 

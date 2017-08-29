@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 17:41:10 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/08/29 01:51:13 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/08/29 22:31:44 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ Reducer &		Reducer::operator=(Reducer const & rhs) {
 
 
 
-// CALCULATE NUM _______________________________________________________________
+// step1 CALCULATE * ^ NUM _____________________________________________________
 void		Reducer::calculate_powerNum(void) {
 	size_t c = 0;
 	long double result;
@@ -61,14 +61,17 @@ void		Reducer::calculate_powerNum(void) {
 			lexical.erase(lexical.begin() + (c - 1));
 			c--;
 		}
-		else if (lexical[c].token == POWER && lexical[c-1].token == XSYMB) {
+		else if (lexical[c].token == POWER && lexical[c-1].token == XSYMB) {	// X^6 => 6 (POWER)
 			lexical[c+1].token = POWER;
 			lexical.erase(lexical.begin() + (c));
+			lexical.erase(lexical.begin() + (c-1));
+			c--;
 		}
 		c++;
 	}
 
 	calculate_multiNum();
+	set_Xpow();
 	set_allNum();
 }
 
@@ -91,24 +94,105 @@ void		Reducer::calculate_multiNum(void) {
 }
 
 
+
+// step2 SEARCH X ______________________________________________________________
+void		Reducer::set_Xpow(void) {
+	size_t c = 0;
+	_sign = 1;
+	_j = 0;
+	bool multi = false;
+	while (c < lexical.size()) {
+		_Xpow.push_back(s_Xpow());
+		while (c < lexical.size()) {
+			if (lexical[c].token == MULTI) {
+				if (multi == false) {
+					push_Xpow(c-1);
+					multi = true;
+				}
+				push_Xpow(c+1);
+				c++;
+			}
+			else if (lexical[c].token == PLUS || lexical[c].token == MINUS
+												|| lexical[c].token == END) {
+				if (lexical[c].token == END)
+					_sign = -1;
+				c++;
+				multi = false;
+				break;
+			}
+			c++;
+		}
+		_j++;
+	}
+
+	debug_print_Xpow();
+}
+
+
+
+void		Reducer::push_Xpow(size_t c) {
+	_Xpow[_j].sign = _sign;
+
+	if (lexical[c].token == RNUM) {
+		_ld1 = stringToLong(lexical[c].lexeme);
+		lexical[c].lexeme = longToString(_ld1);
+		_Xpow[_j].allCoeff.push_back(_ld1);
+	}
+	else if (lexical[c].token == POWER) {
+		_ld1 = stringToLong(lexical[c].lexeme);
+		lexical[c].lexeme = longToString(_ld1);
+		_Xpow[_j].allPower.push_back(_ld1);
+	}
+	else if (lexical[c].token == XSYMB) {
+		_ld1 = 1;
+		_Xpow[_j].allPower.push_back(_ld1);
+	}
+}
+
+
+void		Reducer::debug_print_Xpow(void) const {
+	size_t c = 0;
+	size_t j = 0;
+	std::cout << BLUE << "\n\t****** DEBUG _Xpow ******\n" << NORMAL;
+	while (c < _Xpow.size()) {
+		j = 0;
+		std::cout << "\tallPower = \n";
+		while (j < _Xpow[c].allPower.size()) {
+			std::cout << "\t\t" << _Xpow[c].allPower[j] << std::endl;
+			j++;
+		}
+		j = 0;
+		std::cout << "\tallCoeff = \n";
+		while (j < _Xpow[c].allCoeff.size()) {
+			std::cout << "\t\t" << _Xpow[c].allCoeff[j] << std::endl;
+			j++;
+		}
+
+		std::cout << "\tsign = " << _Xpow[c].sign << std::endl;
+
+		c++;
+	}
+}
+
+
+// step3 REDUCE ALL NUM ________________________________________________________
 void		Reducer::set_allNum(void) {
 	size_t c = 0;
-	std::string line = "";
 	_sign = 1;
 	while (c < lexical.size()) {
-		if (c != 0 && (lexical[c].original_line).compare(line) != 0)
+		if (c != 0 && lexical[c].token == END) {
 			_sign = -1;
-		if (lexical[c].token == RNUM)
+			c++;
+		}
+		if (lexical[c].token == RNUM) {
+			if (c-1 > 0 && lexical[c-1].token == MINUS)
+				_sign = _sign * -1;
 			_allNum.push_back(stringToLong(lexical[c].lexeme) * _sign);
-		if (lexical[c].token == RNUM && c - 1 > 0 && lexical[c - 1].token == MULTI) {
-			lexical[c].token = COEFF;
-			_allNum.pop_back();
+			if (c+1 < lexical.size() && lexical[c+1].token == MULTI)
+				_allNum.pop_back();
+			else if (c-1 > 0 && lexical[c-1].token == MULTI)
+				_allNum.pop_back();
 		}
-		else if (lexical[c].token == MULTI && lexical[c - 1].token == RNUM) {
-			lexical[c - 1].token = COEFF;
-			_allNum.pop_back();
-		}
-		line = lexical[c].original_line;
 		c++;
 	}
 
@@ -144,48 +228,6 @@ void		Reducer::debug_print_allNum(void) const {
 	std::cout << BLUE << "\t___________________________\n\n" << NORMAL;
 }
 
-
-
-// X POWER _____________________________________________________________________
-void		Reducer::search_powerX(std::vector<s_scanner> & lexical) {
-	size_t c = 0;
-	int j = -1;
-	_sign = 1;
-	std::string line = "";
-	while (c < lexical.size()) {
-		if (c != 0 && (lexical[c].original_line).compare(line) != 0)
-			_sign = -1;
-		if (lexical[c].token == COEFF || lexical[c] == XSYMB) {
-			j++;
-			_Xpow.push_back(s_Xpower());
-			c = push_Xpower(c, j);
-		}
-		line = lexical[c].original_line;
-		c++;
-	}
-}
-
-
-void		Reducer::push_Xpower(size_t c, int j) {
-	_Xpow[j].power = 1;															//by default
-	_Xpow[j].sign = _sign;
-	while (c < lexical.size()) {
-		if (lexical[c].token == COEFF) {
-			_ld1 = stringToLong(lexical[c].lexeme);
-			lexical[c].lexeme = longToString(_ld1);
-			_Xpow[j].allCoeff.push_back(_ld1);
-			c++;
-		}
-		else if (lexical[c].token == MULTI) {
-			c++;
-		}
-		else if (l)
-		else
-			break;
-	}
-	return c;
-	//attention X sans puissance
-}
 
 
 

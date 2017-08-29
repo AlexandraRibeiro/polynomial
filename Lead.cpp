@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/17 18:43:11 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/08/29 01:10:36 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/08/29 22:32:46 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,8 +137,6 @@ void		Lead::runReducer(void) {
 	if (debug_option == true) {
 		std::cout << GREEN << "\n\tAfter REDUCER" << NORMAL << std::endl;
 		_lexer->debug_print_lexical();
-		_reducer->debug_print_allNum();
 	}
-
 
 }

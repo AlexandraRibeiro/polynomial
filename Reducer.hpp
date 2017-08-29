@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 17:41:13 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/08/29 01:41:59 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/08/29 22:29:56 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@
 # include "Lexer.hpp"
 
 
-struct s_Xpower {
-	long double					power;
+struct s_Xpow {
+	std::vector<long double>	allPower;
 	std::vector<long double> 	allCoeff;
 	int							sign;
 };
@@ -29,24 +29,28 @@ class Reducer {
 		Reducer(Reducer const & cpy);
 		~Reducer(void);
 		Reducer & operator=(Reducer const & );
-		// CALCULATE NUM _______________________________________________________
+		// step1 CALCULATE * ^ NUM _____________________________________________
 		void	calculate_powerNum(void);
 		void	calculate_multiNum(void);
+		//step2 SEARCH X _______________________________________________________
+		void	set_Xpow(void);
+		void	push_Xpow(size_t c);
+		void	debug_print_Xpow(void) const;
+		//step3 REDUCE ALL NUM _________________________________________________
 		void	set_allNum(void);
 		void	calculate_allNum(void);
 		void	debug_print_allNum(void) const;
-		// X POWER _____________________________________________________________
-		void	search_powerX();
-		size_t	push_Xpower(size_t c, int j)
+
 		// GETTER ______________________________________________________________
 		std::vector<s_scanner>	& get_lexical(void) const;
 
 	private:
 		std::vector<long double>		_allNum;
 		int								_sign;
+		int								_j;
 		long double						_ld1;
 		long double						_ld2;
-		std::vector<s_Xpower>			_Xpow;
+		std::vector<s_Xpow>				_Xpow;
 		std::vector<s_scanner>			&lexical;
 };
 
