@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/24 14:05:34 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/08/29 20:54:03 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/08/30 14:37:59 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ void		Parser::set_parsing(std::vector<s_scanner> & lexical) {
 		_prev_token = token;
 		c++;
 	}
-	// clean_lexical(lexical);
 }
 
 size_t		Parser::set_booleans(int token, size_t c, std::vector<s_scanner> & lexical) {
@@ -84,19 +83,3 @@ size_t		Parser::set_booleans(int token, size_t c, std::vector<s_scanner> & lexic
 	}
 	return c;
 }
-
-
-//
-//
-// void		Parser::clean_lexical(std::vector<s_scanner> & lexical) {
-// 	size_t c = 0;
-// 	while (c < lexical.size()) {
-// 		if (lexical[c].token == PLUS || lexical[c].token == MINUS) {
-// 			lexical.erase(lexical.begin() + (c));
-// 			c--;
-// 		}
-// 		else if (lexical[c].token == INUM)
-// 			lexical[c].token = RNUM;
-// 		c++;
-// 	}
-// }

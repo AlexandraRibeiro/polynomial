@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 17:41:10 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/08/29 22:31:44 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/08/30 14:40:27 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,8 +112,14 @@ void		Reducer::set_Xpow(void) {
 				push_Xpow(c+1);
 				c++;
 			}
-			else if (lexical[c].token == PLUS || lexical[c].token == MINUS
-												|| lexical[c].token == END) {
+			else if (lexical[c].token == XSYMB) {
+				if (c != 0 && lexical[c-1].token == MULTI)
+					break;
+				if ((c + 1) < lexical.size() && lexical[c+1].token == MULTI)
+					break;
+				push_Xpow(c);
+			}
+			else if (lexical[c].token == PLUS || lexical[c].token == MINUS || lexical[c].token == END) {
 				if (lexical[c].token == END)
 					_sign = -1;
 				c++;
@@ -125,7 +131,8 @@ void		Reducer::set_Xpow(void) {
 		_j++;
 	}
 
-	debug_print_Xpow();
+	if (debug_option == true)
+		debug_print_Xpow();
 }
 
 
@@ -145,6 +152,8 @@ void		Reducer::push_Xpow(size_t c) {
 	}
 	else if (lexical[c].token == XSYMB) {
 		_ld1 = 1;
+		if (lexical[c].lexeme.compare("-X") == 0)
+			_ld1 = _ld1 * -1;
 		_Xpow[_j].allPower.push_back(_ld1);
 	}
 }
@@ -156,20 +165,19 @@ void		Reducer::debug_print_Xpow(void) const {
 	std::cout << BLUE << "\n\t****** DEBUG _Xpow ******\n" << NORMAL;
 	while (c < _Xpow.size()) {
 		j = 0;
-		std::cout << "\tallPower = \n";
+		std::cout << "\tallPower = ";
 		while (j < _Xpow[c].allPower.size()) {
-			std::cout << "\t\t" << _Xpow[c].allPower[j] << std::endl;
+			std::cout << "\t" << _Xpow[c].allPower[j];
 			j++;
 		}
 		j = 0;
-		std::cout << "\tallCoeff = \n";
+		std::cout << "\n\tallCoeff = ";
 		while (j < _Xpow[c].allCoeff.size()) {
-			std::cout << "\t\t" << _Xpow[c].allCoeff[j] << std::endl;
+			std::cout << "\t" << _Xpow[c].allCoeff[j];
 			j++;
 		}
-
-		std::cout << "\tsign = " << _Xpow[c].sign << std::endl;
-
+		std::cout << "\n\tsign = \t\t" << _Xpow[c].sign << std::endl;
+		std::cout << BLUE << "\t___________________________\n" << NORMAL;
 		c++;
 	}
 }
@@ -180,18 +188,18 @@ void		Reducer::set_allNum(void) {
 	size_t c = 0;
 	_sign = 1;
 	while (c < lexical.size()) {
-		if (c != 0 && lexical[c].token == END) {
-			_sign = -1;
-			c++;
-		}
 		if (lexical[c].token == RNUM) {
-			if (c-1 > 0 && lexical[c-1].token == MINUS)
-				_sign = _sign * -1;
 			_allNum.push_back(stringToLong(lexical[c].lexeme) * _sign);
 			if (c+1 < lexical.size() && lexical[c+1].token == MULTI)
 				_allNum.pop_back();
 			else if (c-1 > 0 && lexical[c-1].token == MULTI)
 				_allNum.pop_back();
+		}
+		if (lexical[c].token == MINUS && lexical[c+1].token == RNUM) {
+			lexical[c+1].lexeme.insert(0,1,'-');
+		}
+		if (c != 0 && lexical[c].token == END) {
+			_sign = -1;
 		}
 		c++;
 	}
