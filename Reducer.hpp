@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 17:41:13 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/08/31 19:00:55 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/08/31 19:37:45 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ class Reducer {
 		Reducer(Reducer const & cpy);
 		~Reducer(void);
 		Reducer & operator=(Reducer const & );
-		// step1 CALCULATE * ^ RNUM ____________________________________________
+		//step1 CALCULATE * ^ RNUM _____________________________________________
 		void	calculate_powerNum(void);
 		void	calculate_multiNum(void);
 		//step2 SEARCH X _______________________________________________________

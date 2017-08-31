@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 17:41:10 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/08/31 19:02:30 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/08/31 19:52:54 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,8 @@ void		Reducer::calculate_powerNum(void) {
 		}
 		else if (lexical[c].token == POWER && lexical[c-1].token == XSYMB) {	// X^6 => 6 (POWER)
 			lexical[c+1].token = POWER;
+			if (lexical[c-1].lexeme.compare("-X") == 0)
+				lexical[c+1].lexeme.insert(0,1,'-');
 			lexical.erase(lexical.begin() + (c));
 			lexical.erase(lexical.begin() + (c-1));
 			c--;
@@ -143,6 +145,10 @@ void		Reducer::set_Xpow(void) {
 
 
 void		Reducer::push_Xpow(size_t c) {
+	std::cout << "debug sign" << std::endl;
+	std::cout << "lexical[c].lexeme " << lexical[c].lexeme << std::endl;
+
+
 	if (_Xpow[_j].sign == 0)
 		_Xpow[_j].sign = _sign;
 
@@ -154,12 +160,17 @@ void		Reducer::push_Xpow(size_t c) {
 	else if (lexical[c].token == POWER) {
 		_ld1 = stringToLong(lexical[c].lexeme);
 		lexical[c].lexeme = longToString(_ld1);
+		if (lexical[c].lexeme[0] == '-') {
+			_Xpow[_j].sign = _sign * -1;
+			_ld1 = _ld1 * -1;
+		}
 		_Xpow[_j].allPower.push_back(_ld1);
 	}
 	else if (lexical[c].token == XSYMB) {
 		_ld1 = 1;
-		if (lexical[c].lexeme.compare("-X") == 0)
+		if (lexical[c].lexeme.compare("-X") == 0) {
 			_Xpow[_j].sign = _sign * -1;
+		}
 		_Xpow[_j].allPower.push_back(_ld1);
 	}
 }
@@ -307,7 +318,7 @@ void		Reducer::match_power(size_t c, size_t k) {
 	_ld1 = _ld1 + _ld2;
 	longToString(_ld1); //verif secu
 	_Xpow[c].allCoeff.push_back(_ld1);
-
+	_Xpow[c].sign = _Xpow[c].sign * _Xpow[k].sign; //ne pas perdre le -
 }
 
 
