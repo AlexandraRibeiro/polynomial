@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 17:41:13 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/08/31 17:05:28 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/08/31 19:00:55 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,9 @@ class Reducer {
 		void	debug_print_allNum(void) const;
 		//step4 PRINT REDUCE FORM ______________________________________________
 		void	reduceAll(void);
-		void	reduce_allCoeff(size_t c);
-		// void	sort_power(void);
+		void	reduce_all(std::vector<long double> &all, int i);
+		void	sort_power(void);
+		void	match_power(size_t c, size_t k);
 
 		// GETTER ______________________________________________________________
 		std::vector<s_scanner>	& get_lexical(void) const;

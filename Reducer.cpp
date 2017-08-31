@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 17:41:10 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/08/31 17:32:54 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/08/31 19:02:30 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,8 @@ void		Reducer::set_Xpow(void) {
 
 
 void		Reducer::push_Xpow(size_t c) {
-	_Xpow[_j].sign = _sign;
+	if (_Xpow[_j].sign == 0)
+		_Xpow[_j].sign = _sign;
 
 	if (lexical[c].token == RNUM) {
 		_ld1 = stringToLong(lexical[c].lexeme);
@@ -158,7 +159,7 @@ void		Reducer::push_Xpow(size_t c) {
 	else if (lexical[c].token == XSYMB) {
 		_ld1 = 1;
 		if (lexical[c].lexeme.compare("-X") == 0)
-			_ld1 = _ld1 * -1;
+			_Xpow[_j].sign = _sign * -1;
 		_Xpow[_j].allPower.push_back(_ld1);
 	}
 }
@@ -247,42 +248,67 @@ void		Reducer::debug_print_allNum(void) const {
 void		Reducer::reduceAll(void) {
 	size_t c = 0;
 	while (c < _Xpow.size()) {
-		reduce_allCoeff(c);
+		reduce_all(_Xpow[c].allCoeff, MULTI);
+		reduce_all(_Xpow[c].allPower, PLUS);
 		c++;
 	}
 
-	if (debug_option == true)
+	if (debug_option == true) {
+		std::cout << GREEN << "\n\n\tAfter reduceAll() :" << NORMAL << std::endl;
 		debug_print_Xpow();
+	}
 
 	sort_power();
 }
 
-void		Reducer::reduce_allCoeff(size_t c) {
-	while (_Xpow[c].allCoeff.size() > 1) {
-		_ld1 = _Xpow[c].allCoeff.back();
-		_Xpow[c].allCoeff.pop_back();
-		_ld2 = _Xpow[c].allCoeff.back();
-		_Xpow[c].allCoeff.pop_back();
-		_ld1 = _ld1 * _ld2;
+void		Reducer::reduce_all(std::vector<long double> &all, int i) {
+	while (all.size() > 1) {
+		_ld1 = all.back();
+		all.pop_back();
+		_ld2 = all.back();
+		all.pop_back();
+		if (i == MULTI)
+			_ld1 = _ld1 * _ld2;
+		else if (i == PLUS)
+		 	_ld1 = _ld1 + _ld2;
 		longToString(_ld1); //verif secu
-		_Xpow[c].allCoeff.push_back(_ld1);
+		all.push_back(_ld1);
 	}
 }
 
 void		Reducer::sort_power(void) {
 	size_t c = 0;
-	size_t j = 0;
-	while (c < _Xpow.size()) {													// 3 cases : size = 0 / size = 1 / size > 1
-		if (_Xpow[c].allCoeff.size() < 0)
-			j++;
-		else if (_Xpow[c].allCoeff.size() == 1)
-			_ld1 = _Xpow[c].allCoeff.back();
+	size_t k = 0;
+	_sign = 0;
+	while (c < _Xpow.size()) {
+		if (_Xpow[c].allPower.size() == 1) {
+			_ld1 = _Xpow[c].allPower.back();
+			k = c + 1;															//be careful to watch only after
+			while (k < _Xpow.size()) {
+				if (_Xpow[k].allPower.size() == 1 && _ld1 == _Xpow[k].allPower.back())
+					match_power(c, k);
+				k++;
+			}
 		}
 		c++;
 	}
 
+	if (debug_option == true) {
+		std::cout << GREEN << "\n\n\tAfter sort_power() :" << NORMAL << std::endl;
+		debug_print_Xpow();
+	}
 }
 
+void		Reducer::match_power(size_t c, size_t k) {
+	_ld2 = _Xpow[k].allCoeff.back();
+	_Xpow[k].allCoeff.pop_back();
+	_ld1 = _Xpow[c].allCoeff.back();
+	_Xpow[c].allCoeff.pop_back();
+	_ld1 = _ld1 + _ld2;
+	longToString(_ld1); //verif secu
+	_Xpow[c].allCoeff.push_back(_ld1);
+
+}
 
 
 // GETTER ______________________________________________________________________
