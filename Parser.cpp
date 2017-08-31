@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/24 14:05:34 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/08/30 14:37:59 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/08/31 13:20:53 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,19 +38,15 @@ void		Parser::set_parsing(std::vector<s_scanner> & lexical) {
 	_prev_token = -1;
 	_op = true;
 	_nb = false;
-	std::string line = "";
 	while (c < lexical.size()) {
-		if (c != 0 && (lexical[c].original_line).compare(line) != 0) {
+		if (lexical[c].token == END) {
 			_op = true;
 			_nb = false;
-			lexical.insert(lexical.begin() + c, s_scanner());
-			lexical[c].token = END;
 			c++;
 		}
 		token = lexical[c].token;
 		if (token == RNUM && lexical[c].lexeme.size() == 1)
 			throw BaseException("=> (parser) Error '.' is not a valid real number.");
-		line = lexical[c].original_line;
 		c = set_booleans(token, c, lexical);
 		_prev_token = token;
 		c++;

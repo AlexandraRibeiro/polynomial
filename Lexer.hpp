@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/23 16:53:30 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/08/28 23:26:00 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/08/31 14:03:11 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ class Lexer {
 		int							fsm(std::string &str, int j);
 		void						fill_lexical(int j, int token, char c);
 		std::vector<s_scanner>		& get_lexical(void);
-		void						debug_print_lexical(void);
+		void						debug_print_lexical(void) const;
 		void						set_error(char c, std::string &str);
 		//GETTER _______________________________________________
 		int							get_token(char c) const;

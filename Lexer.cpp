@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/23 16:53:26 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/08/28 23:26:19 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/08/31 14:02:40 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,9 @@ void					Lexer::set_lexical(std::vector<std::string> & split) {
 	std::string _p2 = split[1];
 	int j = 0;
 	j = fsm(_p1, j);
+	_lexical.push_back(s_scanner());
+	_lexical[j].token = END;
+	j++;
 	fsm(_p2, j);
 }
 
@@ -82,7 +85,7 @@ std::vector<s_scanner>	& Lexer::get_lexical(void) {
 	return _lexical;
 }
 
-void					Lexer::debug_print_lexical(void) {
+void					Lexer::debug_print_lexical(void) const {
 	size_t c = 0;
 	std::cout << BLUE << "\n\n\t****** DEBUG LEXICAL ******\n" << NORMAL;
 	while (c < _lexical.size())

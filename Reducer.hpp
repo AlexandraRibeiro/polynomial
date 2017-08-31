@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 17:41:13 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/08/29 22:29:56 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/08/31 17:05:28 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,28 +29,32 @@ class Reducer {
 		Reducer(Reducer const & cpy);
 		~Reducer(void);
 		Reducer & operator=(Reducer const & );
-		// step1 CALCULATE * ^ NUM _____________________________________________
+		// step1 CALCULATE * ^ RNUM ____________________________________________
 		void	calculate_powerNum(void);
 		void	calculate_multiNum(void);
 		//step2 SEARCH X _______________________________________________________
 		void	set_Xpow(void);
 		void	push_Xpow(size_t c);
 		void	debug_print_Xpow(void) const;
-		//step3 REDUCE ALL NUM _________________________________________________
+		//step3 REDUCE ALL RNUM ________________________________________________
 		void	set_allNum(void);
 		void	calculate_allNum(void);
 		void	debug_print_allNum(void) const;
+		//step4 PRINT REDUCE FORM ______________________________________________
+		void	reduceAll(void);
+		void	reduce_allCoeff(size_t c);
+		// void	sort_power(void);
 
 		// GETTER ______________________________________________________________
 		std::vector<s_scanner>	& get_lexical(void) const;
 
 	private:
-		std::vector<long double>		_allNum;
 		int								_sign;
 		int								_j;
 		long double						_ld1;
 		long double						_ld2;
 		std::vector<s_Xpow>				_Xpow;
+		std::vector<long double>		_allNum;
 		std::vector<s_scanner>			&lexical;
 };
 

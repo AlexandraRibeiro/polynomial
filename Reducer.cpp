@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 17:41:10 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/08/30 14:40:27 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/08/31 17:32:54 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,9 @@ Reducer &		Reducer::operator=(Reducer const & rhs) {
 
 
 
-// step1 CALCULATE * ^ NUM _____________________________________________________
+// step1 CALCULATE * ^ RNUM ____________________________________________________
 void		Reducer::calculate_powerNum(void) {
+	/* step 1 */
 	size_t c = 0;
 	long double result;
 	while (c < lexical.size()) {
@@ -71,8 +72,12 @@ void		Reducer::calculate_powerNum(void) {
 	}
 
 	calculate_multiNum();
+	/* step 2 */
 	set_Xpow();
+	/* step 3 */
 	set_allNum();
+	/* step4 */
+	reduceAll();
 }
 
 
@@ -165,25 +170,25 @@ void		Reducer::debug_print_Xpow(void) const {
 	std::cout << BLUE << "\n\t****** DEBUG _Xpow ******\n" << NORMAL;
 	while (c < _Xpow.size()) {
 		j = 0;
-		std::cout << "\tallPower = ";
+		std::cout << "\tallPower =   ";
 		while (j < _Xpow[c].allPower.size()) {
-			std::cout << "\t" << _Xpow[c].allPower[j];
+			std::cout << " " << _Xpow[c].allPower[j];
 			j++;
 		}
 		j = 0;
-		std::cout << "\n\tallCoeff = ";
+		std::cout << "\n\tallCoeff =   ";
 		while (j < _Xpow[c].allCoeff.size()) {
-			std::cout << "\t" << _Xpow[c].allCoeff[j];
+			std::cout << " " << _Xpow[c].allCoeff[j];
 			j++;
 		}
-		std::cout << "\n\tsign = \t\t" << _Xpow[c].sign << std::endl;
+		std::cout << "\n\tsign = \t   " << _Xpow[c].sign << std::endl;
 		std::cout << BLUE << "\t___________________________\n" << NORMAL;
 		c++;
 	}
 }
 
 
-// step3 REDUCE ALL NUM ________________________________________________________
+// step3 REDUCE ALL RNUM _______________________________________________________
 void		Reducer::set_allNum(void) {
 	size_t c = 0;
 	_sign = 1;
@@ -236,6 +241,47 @@ void		Reducer::debug_print_allNum(void) const {
 	std::cout << BLUE << "\t___________________________\n\n" << NORMAL;
 }
 
+
+
+// step4 PRINT REDUCE FORM ____________________________________________________
+void		Reducer::reduceAll(void) {
+	size_t c = 0;
+	while (c < _Xpow.size()) {
+		reduce_allCoeff(c);
+		c++;
+	}
+
+	if (debug_option == true)
+		debug_print_Xpow();
+
+	sort_power();
+}
+
+void		Reducer::reduce_allCoeff(size_t c) {
+	while (_Xpow[c].allCoeff.size() > 1) {
+		_ld1 = _Xpow[c].allCoeff.back();
+		_Xpow[c].allCoeff.pop_back();
+		_ld2 = _Xpow[c].allCoeff.back();
+		_Xpow[c].allCoeff.pop_back();
+		_ld1 = _ld1 * _ld2;
+		longToString(_ld1); //verif secu
+		_Xpow[c].allCoeff.push_back(_ld1);
+	}
+}
+
+void		Reducer::sort_power(void) {
+	size_t c = 0;
+	size_t j = 0;
+	while (c < _Xpow.size()) {													// 3 cases : size = 0 / size = 1 / size > 1
+		if (_Xpow[c].allCoeff.size() < 0)
+			j++;
+		else if (_Xpow[c].allCoeff.size() == 1)
+			_ld1 = _Xpow[c].allCoeff.back();
+		}
+		c++;
+	}
+
+}
 
 
 
