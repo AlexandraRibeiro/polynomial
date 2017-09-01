@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 17:41:10 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/08/31 19:52:54 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/09/01 16:31:50 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ void		Reducer::calculate_powerNum(void) {
 	/* step 3 */
 	set_allNum();
 	/* step4 */
-	reduceAll();
+	reduceForm();
 }
 
 
@@ -145,10 +145,6 @@ void		Reducer::set_Xpow(void) {
 
 
 void		Reducer::push_Xpow(size_t c) {
-	std::cout << "debug sign" << std::endl;
-	std::cout << "lexical[c].lexeme " << lexical[c].lexeme << std::endl;
-
-
 	if (_Xpow[_j].sign == 0)
 		_Xpow[_j].sign = _sign;
 
@@ -169,9 +165,11 @@ void		Reducer::push_Xpow(size_t c) {
 	else if (lexical[c].token == XSYMB) {
 		_ld1 = 1;
 		if (lexical[c].lexeme.compare("-X") == 0) {
-			_Xpow[_j].sign = _sign * -1;
+			// _Xpow[_j].sign = _sign * -1;
+			_Xpow[_j].allCoeff.push_back(_sign * -1);
 		}
 		_Xpow[_j].allPower.push_back(_ld1);
+
 	}
 }
 
@@ -256,7 +254,7 @@ void		Reducer::debug_print_allNum(void) const {
 
 
 // step4 PRINT REDUCE FORM ____________________________________________________
-void		Reducer::reduceAll(void) {
+void		Reducer::reduceForm(void) {
 	size_t c = 0;
 	while (c < _Xpow.size()) {
 		reduce_all(_Xpow[c].allCoeff, MULTI);
@@ -265,11 +263,13 @@ void		Reducer::reduceAll(void) {
 	}
 
 	if (debug_option == true) {
-		std::cout << GREEN << "\n\n\tAfter reduceAll() :" << NORMAL << std::endl;
+		std::cout << GREEN << "\n\n\tAfter reduce_all() :" << NORMAL << std::endl;
 		debug_print_Xpow();
 	}
 
 	sort_power();
+	clean_Xpow();
+	print_reduceForm();
 }
 
 void		Reducer::reduce_all(std::vector<long double> &all, int i) {
@@ -296,8 +296,10 @@ void		Reducer::sort_power(void) {
 			_ld1 = _Xpow[c].allPower.back();
 			k = c + 1;															//be careful to watch only after
 			while (k < _Xpow.size()) {
-				if (_Xpow[k].allPower.size() == 1 && _ld1 == _Xpow[k].allPower.back())
+				if (_Xpow[k].allPower.size() == 1 && _ld1 == _Xpow[k].allPower.back()) {
 					match_power(c, k);
+					_Xpow.erase(_Xpow.begin() + k);
+				}
 				k++;
 			}
 		}
@@ -310,15 +312,76 @@ void		Reducer::sort_power(void) {
 	}
 }
 
+void		Reducer::clean_Xpow(void) {
+	size_t c = 0;
+	while (c < _Xpow.size()) {
+		if (_Xpow[c].allPower.size() == 0) {
+			_Xpow.erase(_Xpow.begin() + (c));
+		}
+		c++;
+	}
+
+	if (debug_option == true) {
+		std::cout << GREEN << "\n\n\tAfter clean_Xpow() :" << NORMAL << std::endl;
+		debug_print_Xpow();
+	}
+}
+
 void		Reducer::match_power(size_t c, size_t k) {
-	_ld2 = _Xpow[k].allCoeff.back();
-	_Xpow[k].allCoeff.pop_back();
-	_ld1 = _Xpow[c].allCoeff.back();
-	_Xpow[c].allCoeff.pop_back();
-	_ld1 = _ld1 + _ld2;
-	longToString(_ld1); //verif secu
-	_Xpow[c].allCoeff.push_back(_ld1);
-	_Xpow[c].sign = _Xpow[c].sign * _Xpow[k].sign; //ne pas perdre le -
+	bool verif = false;
+	_ld1 = 0;
+	_ld2 = 0;
+	if (_Xpow[k].allCoeff.size() > 0) {
+		_ld2 = _Xpow[k].allCoeff.back();
+		_Xpow[k].allCoeff.pop_back();
+		verif = true;
+	}
+	if (_Xpow[c].allCoeff.size() > 0) {
+		_ld1 = _Xpow[c].allCoeff.back();
+		_Xpow[c].allCoeff.pop_back();
+		verif = true;
+	}
+	if (verif == true) {
+		_ld1 = _ld1 + _ld2;
+		longToString(_ld1); //verif secu
+		_Xpow[c].allCoeff.push_back(_ld1);
+	}
+	_Xpow[c].sign = _Xpow[c].sign * _Xpow[k].sign;
+}
+
+void		Reducer::print_reduceForm(void) {
+	long double min = -1;
+	size_t c = 0;
+	size_t k = 0;
+	_ld1 = 1;
+	_ld2 = 1;
+	std::cout << YELLOW << "Reduced form : " << NORMAL;
+	while (c < _Xpow.size()) {
+		k = 0;
+		_j = 0;
+		while (k < _Xpow.size()) {
+			if (_Xpow[k].allPower.size() == 1 && _Xpow[k].allPower.back() > min && _Xpow[k].allPower.back() < _ld1) {
+				_ld1 = _Xpow[k].allPower.back();
+				if (_Xpow[k].allCoeff.size() == 1)
+					_ld2 = _Xpow[k].allCoeff.back();
+				_sign = _Xpow[k].sign;
+				_j++;
+			}
+			k++;
+		}
+		if (_j == 0) {
+			_ld1 = _ld1 + 2;
+		}
+		else if (k != 0) {
+			min = _ld1;
+			// if (_sign == -1)
+			// 	std::cout << " -";
+			std::cout << _ld2 << " * X^" << _ld1 << " ";
+			c++;
+		}
+	}
+	//print num
+	std::cout << "= 0\n";
 }
 
 
