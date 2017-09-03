@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 17:41:10 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/09/01 16:31:50 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/09/03 15:03:43 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ void		Reducer::calculate_powerNum(void) {
 			result = _ld1;
 			if (_ld2 == 0)
 				result = 1;
+			if (_ld2 > 200)
+				throw BaseException("=> (reducer) This program does not accept powers superior to 200.");
 			while (_ld2 > 1 && _ld1 > 1) {
 				result = _ld1 * result;
 				_ld2--;
@@ -75,13 +77,13 @@ void		Reducer::calculate_powerNum(void) {
 
 	calculate_multiNum();
 	/* step 2 */
+		set_allNum();
 	set_Xpow();
 	/* step 3 */
-	set_allNum();
+
 	/* step4 */
 	reduceForm();
 }
-
 
 void		Reducer::calculate_multiNum(void) {
 	size_t c = 0;
@@ -101,104 +103,7 @@ void		Reducer::calculate_multiNum(void) {
 }
 
 
-
-// step2 SEARCH X ______________________________________________________________
-void		Reducer::set_Xpow(void) {
-	size_t c = 0;
-	_sign = 1;
-	_j = 0;
-	bool multi = false;
-	while (c < lexical.size()) {
-		_Xpow.push_back(s_Xpow());
-		while (c < lexical.size()) {
-			if (lexical[c].token == MULTI) {
-				if (multi == false) {
-					push_Xpow(c-1);
-					multi = true;
-				}
-				push_Xpow(c+1);
-				c++;
-			}
-			else if (lexical[c].token == XSYMB) {
-				if (c != 0 && lexical[c-1].token == MULTI)
-					break;
-				if ((c + 1) < lexical.size() && lexical[c+1].token == MULTI)
-					break;
-				push_Xpow(c);
-			}
-			else if (lexical[c].token == PLUS || lexical[c].token == MINUS || lexical[c].token == END) {
-				if (lexical[c].token == END)
-					_sign = -1;
-				c++;
-				multi = false;
-				break;
-			}
-			c++;
-		}
-		_j++;
-	}
-
-	if (debug_option == true)
-		debug_print_Xpow();
-}
-
-
-
-void		Reducer::push_Xpow(size_t c) {
-	if (_Xpow[_j].sign == 0)
-		_Xpow[_j].sign = _sign;
-
-	if (lexical[c].token == RNUM) {
-		_ld1 = stringToLong(lexical[c].lexeme);
-		lexical[c].lexeme = longToString(_ld1);
-		_Xpow[_j].allCoeff.push_back(_ld1);
-	}
-	else if (lexical[c].token == POWER) {
-		_ld1 = stringToLong(lexical[c].lexeme);
-		lexical[c].lexeme = longToString(_ld1);
-		if (lexical[c].lexeme[0] == '-') {
-			_Xpow[_j].sign = _sign * -1;
-			_ld1 = _ld1 * -1;
-		}
-		_Xpow[_j].allPower.push_back(_ld1);
-	}
-	else if (lexical[c].token == XSYMB) {
-		_ld1 = 1;
-		if (lexical[c].lexeme.compare("-X") == 0) {
-			// _Xpow[_j].sign = _sign * -1;
-			_Xpow[_j].allCoeff.push_back(_sign * -1);
-		}
-		_Xpow[_j].allPower.push_back(_ld1);
-
-	}
-}
-
-
-void		Reducer::debug_print_Xpow(void) const {
-	size_t c = 0;
-	size_t j = 0;
-	std::cout << BLUE << "\n\t****** DEBUG _Xpow ******\n" << NORMAL;
-	while (c < _Xpow.size()) {
-		j = 0;
-		std::cout << "\tallPower =   ";
-		while (j < _Xpow[c].allPower.size()) {
-			std::cout << " " << _Xpow[c].allPower[j];
-			j++;
-		}
-		j = 0;
-		std::cout << "\n\tallCoeff =   ";
-		while (j < _Xpow[c].allCoeff.size()) {
-			std::cout << " " << _Xpow[c].allCoeff[j];
-			j++;
-		}
-		std::cout << "\n\tsign = \t   " << _Xpow[c].sign << std::endl;
-		std::cout << BLUE << "\t___________________________\n" << NORMAL;
-		c++;
-	}
-}
-
-
-// step3 REDUCE ALL RNUM _______________________________________________________
+// step2 REDUCE ALL RNUM _______________________________________________________
 void		Reducer::set_allNum(void) {
 	size_t c = 0;
 	_sign = 1;
@@ -253,6 +158,102 @@ void		Reducer::debug_print_allNum(void) const {
 
 
 
+
+
+// step3 SEARCH X ______________________________________________________________
+void		Reducer::set_Xpow(void) {
+	size_t c = 0;
+	_sign = 1;
+	_j = 0;
+	bool multi = false;
+
+	while (c < lexical.size()) {
+		_Xpow.push_back(s_Xpow());
+		while (c < lexical.size()) {
+			if (lexical[c].token == MULTI) {
+				if (multi == false) {
+					push_Xpow(c-1);
+					multi = true;
+				}
+				push_Xpow(c+1);
+				c++;
+			}
+			else if (multi == false && (lexical[c].token == XSYMB || lexical[c].token == POWER)) {
+				if (c+1 < lexical.size() && lexical[c+1].token == MULTI) {
+					c++;
+					continue;
+				}
+				push_Xpow(c);
+			}
+			else if (lexical[c].token == PLUS || lexical[c].token == MINUS || lexical[c].token == END) {
+				if (lexical[c].token == END)
+					_sign = -1;
+				c++;
+				multi = false;
+				break;
+			}
+			c++;
+		}
+		_j++;
+	}
+
+	if (debug_option == true)
+		debug_print_Xpow();
+}
+
+
+
+void		Reducer::push_Xpow(size_t c) {
+	if (_Xpow[_j].sign == 0)
+		_Xpow[_j].sign = _sign;
+
+	if (lexical[c].token == RNUM) {
+		_ld1 = stringToLong(lexical[c].lexeme);
+		lexical[c].lexeme = longToString(_ld1);
+		_Xpow[_j].allCoeff.push_back(_ld1);
+	}
+	else if (lexical[c].token == POWER) {
+		_ld1 = stringToLong(lexical[c].lexeme);
+		lexical[c].lexeme = longToString(_ld1);
+		if (lexical[c].lexeme[0] == '-') {
+			_Xpow[_j].sign = _sign * -1;
+			_ld1 = _ld1 * -1;
+		}
+		_Xpow[_j].allPower.push_back(_ld1);
+	}
+	else if (lexical[c].token == XSYMB) {
+		_ld1 = 1;
+		if (lexical[c].lexeme.compare("-X") == 0)
+			_Xpow[_j].allCoeff.push_back(-1);
+		_Xpow[_j].allPower.push_back(_ld1);
+	}
+}
+
+
+void		Reducer::debug_print_Xpow(void) const {
+	size_t c = 0;
+	size_t j = 0;
+	std::cout << BLUE << "\n\t****** DEBUG _Xpow ******\n" << NORMAL;
+	while (c < _Xpow.size()) {
+		j = 0;
+		std::cout << "\tallPower =   ";
+		while (j < _Xpow[c].allPower.size()) {
+			std::cout << " " << _Xpow[c].allPower[j];
+			j++;
+		}
+		j = 0;
+		std::cout << "\n\tallCoeff =   ";
+		while (j < _Xpow[c].allCoeff.size()) {
+			std::cout << " " << _Xpow[c].allCoeff[j];
+			j++;
+		}
+		std::cout << "\n\tsign = \t   " << _Xpow[c].sign << std::endl;
+		std::cout << BLUE << "\t___________________________\n" << NORMAL;
+		c++;
+	}
+}
+
+
 // step4 PRINT REDUCE FORM ____________________________________________________
 void		Reducer::reduceForm(void) {
 	size_t c = 0;
@@ -279,7 +280,7 @@ void		Reducer::reduce_all(std::vector<long double> &all, int i) {
 		_ld2 = all.back();
 		all.pop_back();
 		if (i == MULTI)
-			_ld1 = _ld1 * _ld2;
+			_ld1 = _ld1 * _ld2 ;
 		else if (i == PLUS)
 		 	_ld1 = _ld1 + _ld2;
 		longToString(_ld1); //verif secu
@@ -313,10 +314,11 @@ void		Reducer::sort_power(void) {
 }
 
 void		Reducer::clean_Xpow(void) {
-	size_t c = 0;
-	while (c < _Xpow.size()) {
+ 	int c = 0;
+	while (c <  static_cast<int>(_Xpow.size())) {
 		if (_Xpow[c].allPower.size() == 0) {
 			_Xpow.erase(_Xpow.begin() + (c));
+			c--;
 		}
 		c++;
 	}
@@ -342,11 +344,11 @@ void		Reducer::match_power(size_t c, size_t k) {
 		verif = true;
 	}
 	if (verif == true) {
-		_ld1 = _ld1 + _ld2;
+		_ld1 = _ld1 + (_ld2 * _Xpow[k].sign);
 		longToString(_ld1); //verif secu
 		_Xpow[c].allCoeff.push_back(_ld1);
 	}
-	_Xpow[c].sign = _Xpow[c].sign * _Xpow[k].sign;
+	// _Xpow[c].sign = _Xpow[c].sign * _Xpow[k].sign;
 }
 
 void		Reducer::print_reduceForm(void) {
@@ -355,6 +357,7 @@ void		Reducer::print_reduceForm(void) {
 	size_t k = 0;
 	_ld1 = 1;
 	_ld2 = 1;
+	bool firstOp = false;
 	std::cout << YELLOW << "Reduced form : " << NORMAL;
 	while (c < _Xpow.size()) {
 		k = 0;
@@ -364,7 +367,7 @@ void		Reducer::print_reduceForm(void) {
 				_ld1 = _Xpow[k].allPower.back();
 				if (_Xpow[k].allCoeff.size() == 1)
 					_ld2 = _Xpow[k].allCoeff.back();
-				_sign = _Xpow[k].sign;
+				_ld2 *= _Xpow[k].sign;
 				_j++;
 			}
 			k++;
@@ -374,13 +377,24 @@ void		Reducer::print_reduceForm(void) {
 		}
 		else if (k != 0) {
 			min = _ld1;
-			// if (_sign == -1)
-			// 	std::cout << " -";
+			if (firstOp == false) {
+				firstOp = true;
+			}
+			else if (_ld2 >= 0)
+				std::cout << "+ ";
+			else if (_ld2 < 0) {
+				std::cout << "- ";
+				_ld2 *= -1;
+			}
 			std::cout << _ld2 << " * X^" << _ld1 << " ";
 			c++;
 		}
 	}
-	//print num
+	if (_allNum.size() == 1) {
+		if (_allNum[0] == -0)
+			_allNum[0] = 0;
+		std::cout << "+ " << _allNum[0] << ' ';
+	}
 	std::cout << "= 0\n";
 }
 

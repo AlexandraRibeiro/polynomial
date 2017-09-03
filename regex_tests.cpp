@@ -36,3 +36,6 @@ regex tests :
 verif sign des puissances
 2*-X^0*7= -18
 5*X^0*5 + 2*X^0*7 + 4*X*-X*5 + 4*2*-2= - 3*X*-X*3*X^6 -18
+
+
+-X*X^2 + 3^2 = 0

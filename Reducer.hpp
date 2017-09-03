@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 17:41:13 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/09/01 15:55:42 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/09/03 14:57:09 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,14 +32,14 @@ class Reducer {
 		//step1 CALCULATE * ^ RNUM _____________________________________________
 		void	calculate_powerNum(void);
 		void	calculate_multiNum(void);
-		//step2 SEARCH X _______________________________________________________
-		void	set_Xpow(void);
-		void	push_Xpow(size_t c);
-		void	debug_print_Xpow(void) const;
-		//step3 REDUCE ALL RNUM ________________________________________________
+		//step2 REDUCE ALL RNUM ________________________________________________
 		void	set_allNum(void);
 		void	calculate_allNum(void);
 		void	debug_print_allNum(void) const;
+		//step3 SEARCH X _______________________________________________________
+		void	set_Xpow(void);
+		void	push_Xpow(size_t c);
+		void	debug_print_Xpow(void) const;
 		//step4 PRINT REDUCE FORM ______________________________________________
 		void	reduceForm(void);
 		void	reduce_all(std::vector<long double> &all, int i);

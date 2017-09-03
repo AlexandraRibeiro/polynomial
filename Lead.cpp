@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/17 18:43:11 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/09/01 14:19:46 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/09/03 15:01:49 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,4 +134,8 @@ void		Lead::runReducer(void) {
 	_reducer = new Reducer(_lexer->get_lexical());
 	_reducer->calculate_powerNum();
 
+	// if (debug_option == true) {
+	// 	std::cout << GREEN << "\n\tAfter REDUCER" << NORMAL << std::endl;
+	// 	_lexer->debug_print_lexical();
+	// }
 }
