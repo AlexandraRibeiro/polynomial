@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 22:55:25 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/08/28 23:08:11 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/09/03 15:43:42 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ long double		stringToLong(std::string & str) {
 
 std::string longToString(long double ld) {
 	std::ostringstream oss;
-	oss << std::setprecision(DB_PRECIS) << ld;
+	oss << std::setprecision(LDB_PRECIS) << ld;
 	if (oss.str().compare("inf") == 0 || oss.str().compare("-inf") == 0)
 	 	throw BaseException("=> (reducer) Error one value is too high, detected by longToString().");
 	return oss.str();

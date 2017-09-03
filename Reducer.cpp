@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 17:41:10 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/09/03 15:03:43 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/09/03 15:45:01 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,12 +76,8 @@ void		Reducer::calculate_powerNum(void) {
 	}
 
 	calculate_multiNum();
-	/* step 2 */
-		set_allNum();
+	set_allNum();
 	set_Xpow();
-	/* step 3 */
-
-	/* step4 */
 	reduceForm();
 }
 
@@ -112,7 +108,7 @@ void		Reducer::set_allNum(void) {
 			_allNum.push_back(stringToLong(lexical[c].lexeme) * _sign);
 			if (c+1 < lexical.size() && lexical[c+1].token == MULTI)
 				_allNum.pop_back();
-			else if (c-1 > 0 && lexical[c-1].token == MULTI)
+			else if (c != 0 && lexical[c-1].token == MULTI)
 				_allNum.pop_back();
 		}
 		if (lexical[c].token == MINUS && lexical[c+1].token == RNUM) {
@@ -330,24 +326,19 @@ void		Reducer::clean_Xpow(void) {
 }
 
 void		Reducer::match_power(size_t c, size_t k) {
-	bool verif = false;
 	_ld1 = 0;
 	_ld2 = 0;
 	if (_Xpow[k].allCoeff.size() > 0) {
 		_ld2 = _Xpow[k].allCoeff.back();
 		_Xpow[k].allCoeff.pop_back();
-		verif = true;
 	}
 	if (_Xpow[c].allCoeff.size() > 0) {
 		_ld1 = _Xpow[c].allCoeff.back();
 		_Xpow[c].allCoeff.pop_back();
-		verif = true;
 	}
-	if (verif == true) {
-		_ld1 = _ld1 + (_ld2 * _Xpow[k].sign);
-		longToString(_ld1); //verif secu
-		_Xpow[c].allCoeff.push_back(_ld1);
-	}
+	_ld1 = _ld1 + (_ld2 * _Xpow[k].sign);
+	longToString(_ld1); //verif secu
+	_Xpow[c].allCoeff.push_back(_ld1);
 	// _Xpow[c].sign = _Xpow[c].sign * _Xpow[k].sign;
 }
 
@@ -357,8 +348,12 @@ void		Reducer::print_reduceForm(void) {
 	size_t k = 0;
 	_ld1 = 1;
 	_ld2 = 1;
-	bool firstOp = false;
 	std::cout << YELLOW << "Reduced form : " << NORMAL;
+	if (_allNum.size() == 1) {
+		if (_allNum[0] == -0)
+			_allNum[0] = 0;
+		std::cout << longToString(_allNum[0]) << ' ';
+	}
 	while (c < _Xpow.size()) {
 		k = 0;
 		_j = 0;
@@ -377,24 +372,17 @@ void		Reducer::print_reduceForm(void) {
 		}
 		else if (k != 0) {
 			min = _ld1;
-			if (firstOp == false) {
-				firstOp = true;
-			}
-			else if (_ld2 >= 0)
+			if (_allNum.size() == 1 && _ld2 >= 0)
 				std::cout << "+ ";
 			else if (_ld2 < 0) {
 				std::cout << "- ";
 				_ld2 *= -1;
 			}
-			std::cout << _ld2 << " * X^" << _ld1 << " ";
+			std::cout << longToString(_ld2) << " * X^" << _ld1 << " ";
 			c++;
 		}
 	}
-	if (_allNum.size() == 1) {
-		if (_allNum[0] == -0)
-			_allNum[0] = 0;
-		std::cout << "+ " << _allNum[0] << ' ';
-	}
+
 	std::cout << "= 0\n";
 }
 

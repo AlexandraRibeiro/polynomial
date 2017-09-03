@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/17 18:39:33 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/08/28 20:17:27 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/09/03 15:42:08 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
 # define NORMAL		"\033[0m"
 
 //precision long double -> stringToLong
-# define DB_PRECIS	std::numeric_limits<double>::digits10
+# define LDB_PRECIS	std::numeric_limits<long double>::digits10
 
 void			split(char delim, std::string &str, std::vector<std::string> &split);
 long double		stringToLong(std::string & str);
