@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/04 17:35:39 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/09/05 00:23:12 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/09/05 00:24:29 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,6 @@ void			Resolver::deltaNeg(void) {
 	std::cout << YELLOW << "The two solutions are :\n" << NORMAL;
 
 	_delta *= -1;
-	// long double racine = heronMethod();
 
 	if (_b > 0)
 		std::cout << "(-" << _b;
