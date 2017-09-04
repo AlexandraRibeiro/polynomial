@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 17:41:13 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/09/04 18:15:26 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/09/04 21:04:45 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,10 @@ class Reducer {
 		void	reduceForm(void);
 		void	reduce_all(std::vector<long double> &all, int i);
 		void	sort_power(void);
-		void	clean_Xpow(void);
 		void	match_power(size_t c, size_t k);
+		void	clean_Xpow(void);
 		void	print_reduceForm(void);
-		void	print_XpowMinToMax(bool firstOp);
+		void	print_XpowMinToMax(void);
 		bool	print_sign(bool firstOp);
 
 		// GETTER ______________________________________________________________

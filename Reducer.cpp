@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 17:41:10 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/09/04 18:20:36 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/09/04 21:04:41 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,6 +160,14 @@ void		Reducer::set_Xpow(void) {
 	_j = 0;
 	bool multi = false;
 
+	if (_allNum.size() == 1) {
+		_Xpow.push_back(s_Xpow());
+		_Xpow[_j].allPower.push_back(0);
+		_Xpow[_j].allCoeff.push_back(_allNum[0]);
+		_Xpow[_j].sign = 1;
+		_j++;
+	}
+
 	while (c < lexical.size()) {
 		_Xpow.push_back(s_Xpow());
 		while (c < lexical.size()) {
@@ -284,10 +292,10 @@ void		Reducer::reduce_all(std::vector<long double> &all, int i) {
 }
 
 void		Reducer::sort_power(void) {
-	size_t c = 0;
+	int c = 0;
 	size_t k = 0;
 	_sign = 0;
-	while (c < _Xpow.size()) {
+	while (c < static_cast<int>(_Xpow.size())) {
 		if (_Xpow[c].allPower.size() == 1) {
 			_ld1 = _Xpow[c].allPower.back();
 			k = c + 1;															//be careful to watch only after
@@ -295,6 +303,7 @@ void		Reducer::sort_power(void) {
 				if (_Xpow[k].allPower.size() == 1 && _ld1 == _Xpow[k].allPower.back()) {
 					match_power(c, k);
 					_Xpow.erase(_Xpow.begin() + k);
+					c--;
 				}
 				k++;
 			}
@@ -308,21 +317,6 @@ void		Reducer::sort_power(void) {
 	}
 }
 
-void		Reducer::clean_Xpow(void) {
- 	int c = 0;
-	while (c <  static_cast<int>(_Xpow.size())) {
-		if (_Xpow[c].allPower.size() == 0) {
-			_Xpow.erase(_Xpow.begin() + (c));
-			c--;
-		}
-		c++;
-	}
-
-	if (debug_option == true) {
-		std::cout << GREEN << "\n\n\tAfter clean_Xpow() :" << NORMAL << std::endl;
-		debug_print_Xpow();
-	}
-}
 
 void		Reducer::match_power(size_t c, size_t k) {
 	_ld1 = 1;
@@ -340,26 +334,38 @@ void		Reducer::match_power(size_t c, size_t k) {
 	_Xpow[c].allCoeff.push_back(_ld1);
 }
 
-void		Reducer::print_reduceForm(void) {
-	bool firstOp = false;
-	std::cout << YELLOW << "Reduced form : " << NORMAL;
-	if (_allNum.size() == 1) {
-		if (_allNum[0] == -0)
-			_allNum[0] = 0;
-		std::cout << longToString(_allNum[0]) << ' ';
-		firstOp = true;
+
+void		Reducer::clean_Xpow(void) {
+ 	int c = 0;
+	while (c <  static_cast<int>(_Xpow.size())) {
+		if (_Xpow[c].allPower.size() == 0) {
+			_Xpow.erase(_Xpow.begin() + (c));
+			c--;
+		}
+		c++;
 	}
-	print_XpowMinToMax(firstOp);
+
+	if (debug_option == true) {
+		std::cout << GREEN << "\n\n\tAfter clean_Xpow() :" << NORMAL << std::endl;
+		debug_print_Xpow();
+	}
+}
+
+
+void		Reducer::print_reduceForm(void) {
+	std::cout << YELLOW << "Reduced form : " << NORMAL;
+	print_XpowMinToMax();
 	std::cout << "= 0\n";
 }
 
 
-void	Reducer::print_XpowMinToMax(bool firstOp) {
+void	Reducer::print_XpowMinToMax(void) {
 	long double min = -1;
 	size_t c = 0;
 	size_t k = 0;
 	_ld1 = 1;
 	_ld2 = 1;
+	bool firstOp = false;
 	while (c < _Xpow.size()) {
 		k = 0;
 		_j = 0;
