@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/04 17:35:39 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/09/04 21:49:15 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/09/04 22:46:12 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,8 +94,14 @@ void		Resolver::deltaPositif(void) {
 	*/
 	// long double x1;
 	// long double x2;
+
 	std::cout << "Discriminant is strictly positive, the two solutions are : \n";
 
+	long double racine = heronMethod();
+	std::cout << "X = " << (-_b + racine) / 2 * _a << std::endl;
+	//attention div par zero!!!
+
+	heronMethod();
 
 }
 
@@ -105,13 +111,40 @@ void		Resolver::deltaZero(void) {
 	* X = −b/2a
 	*/
 	std::cout << "Discriminant is null, the solution is : \n";
+
+
 	//attention div par zero!!!
 	std::cout << -_b/2*_a << std::endl;
 
 }
 
 
+long double		Resolver::heronMethod(void) {
+	long double a0 = 1;
+	// _delta = 7;
+	long double a1 = _delta + 1;
+	int i = 1;
+	int result = 0;
 
+	while (result < _delta) {
+		result = i * i;
+		i++;
+	}
+
+	a0 = result;
+	while (a1 > 1) {
+		a1 = (a0 + _delta/a0) / 2;
+		a0 = a1;
+	}
+	// while (a1 > 1) {
+	// 	a1 = (a0 + _delta/a0) / 2;
+	// 	a0 = a1;
+	// }
+
+	std::cout << "a1 = " << a1 << std::endl;
+
+	return a1;
+}
 
 // GETTERS _____________________________________________________________________
 std::vector<s_Xpow>			& Resolver::get_xpow(void) const {
