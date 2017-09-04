@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/04 17:35:39 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/09/04 22:46:12 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/09/05 00:23:12 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,78 +70,98 @@ void		Resolver::discriminant(void) {
 			_a = xpow[k].allCoeff.back();
 		k++;
 	}
-	std::cout << "a = " << _a << std::endl;
-	std::cout << "b = " << _b << std::endl;
-	std::cout << "c = " << _c << std::endl;
-	_b = _b * _b;
-	std::cout << "new b = " << _b << std::endl;
-	_delta = _b - 4 * _a * _c;
-	std::cout << "delta =  " << _delta << std::endl;
-	if (_delta > 0)
-		deltaPositif();
-	else if (_delta == 0)
+	_delta = (_b * _b) - 4 * _a * _c;
+
+	if (verbose_option == true) {
+		std::cout << YELLOW << "\nDiscriminant :\n" << NORMAL;
+		std::cout << "delta = b^2 - 4 * a * c\n";
+		std::cout << "delta = " << _b << "^2 - 4 * " << _a << " * " << _c << std::endl;
+		std::cout << "delta = " << _delta << std::endl;
+	}
+
+	if (_delta == 0)
 		deltaZero();
-	// else
-	//
+	else if (_delta > 0)
+		deltaPositif();
+	else
+		deltaNeg();
+}
+
+
+
+void		Resolver::deltaZero(void) {
+	/*
+	* 1 solution :
+	* X = −b/(2a)
+	*/
+	std::cout << "Discriminant is null.\n";
+	std::cout << YELLOW << "The solution is :\n" << NORMAL;
+
+	//attention div par zero!!!
+	std::cout << -_b / (2 * _a) << std::endl;
 
 }
 
 void		Resolver::deltaPositif(void) {
 	/*
 	* 2 solutions :
-	* X' = ( −b + √_delta ) / 2a
-	* X'' =( −b − √_delta ) / 2a
+	* x1 = ( −b - √_delta ) / (2a)
+	* x2 =( −b + √_delta ) / (2a)
 	*/
-	// long double x1;
-	// long double x2;
 
-	std::cout << "Discriminant is strictly positive, the two solutions are : \n";
+	std::cout << "Discriminant is strictly positive.\n";
+	std::cout << YELLOW << "The two solutions are :\n" << NORMAL;
 
 	long double racine = heronMethod();
-	std::cout << "X = " << (-_b + racine) / 2 * _a << std::endl;
+
+	std::cout << (-_b - racine) / (2 * _a) << std::endl;
+	std::cout << (-_b + racine) / (2 * _a) << std::endl;
 	//attention div par zero!!!
 
 	heronMethod();
 
 }
 
-void		Resolver::deltaZero(void) {
+
+void			Resolver::deltaNeg(void) {
 	/*
-	* 1 solution :
-	* X = −b/2a
+	* 2 solutions :
+	* x1 = (−b − i√(-Δ)) / (2a)
+	* x2 = (−b + i√(-Δ)) / (2a)
 	*/
-	std::cout << "Discriminant is null, the solution is : \n";
 
+	std::cout << "Discriminant is strictly negative.\n";
+	std::cout << YELLOW << "The two solutions are :\n" << NORMAL;
 
-	//attention div par zero!!!
-	std::cout << -_b/2*_a << std::endl;
+	_delta *= -1;
+	// long double racine = heronMethod();
 
+	if (_b > 0)
+		std::cout << "(-" << _b;
+	else
+		std::cout << "(" << _b;
+	std::cout << " - i√" << _delta << ") / (2 * " << _a << ")\n";
+
+	if (_b > 0)
+		std::cout << "(-" << _b;
+	else
+		std::cout << "(" << _b;
+	std::cout << " + i√" << _delta << ") / (2 * " << _a << ")\n";
 }
 
 
 long double		Resolver::heronMethod(void) {
-	long double a0 = 1;
-	// _delta = 7;
-	long double a1 = _delta + 1;
-	int i = 1;
-	int result = 0;
+	long double a1 = 2;
+	long double average;
+	int i = 0;
 
-	while (result < _delta) {
-		result = i * i;
+	average = _delta;
+
+	while (a1 > 1 && i < 7) {
+		a1 = (average + _delta/average) / 2;
+		average = a1;
 		i++;
 	}
-
-	a0 = result;
-	while (a1 > 1) {
-		a1 = (a0 + _delta/a0) / 2;
-		a0 = a1;
-	}
-	// while (a1 > 1) {
-	// 	a1 = (a0 + _delta/a0) / 2;
-	// 	a0 = a1;
-	// }
-
-	std::cout << "a1 = " << a1 << std::endl;
 
 	return a1;
 }
