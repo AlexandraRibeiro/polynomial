@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/04 17:35:46 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/09/04 18:33:58 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/09/04 21:40:52 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,21 +18,27 @@
 
 class Resolver {
 	public:
-		Resolver(std::vector<s_Xpow> & _Xpow, std::vector<long double> & _allNum, long double ld1);
+		Resolver(std::vector<s_Xpow> & _Xpow, long double ld1);
 		Resolver(Resolver const & cpy);
 		~Resolver(void);
 		Resolver & operator=(Resolver const & );
 		// _____________________________________________________________________
 		void	tryToResolve(void);
 		void	print_degree(void);
+		// 2nd DEGREE __________________________________________________________
+		void	discriminant(void);
+		void	deltaPositif(void);
+		void	deltaZero(void);
 		// GETTERS _____________________________________________________________
 		std::vector<s_Xpow>			& get_xpow(void) const;
-		std::vector<long double>	& get_allNum(void) const;
 		long double					get_maxDegree(void) const;
 	private:
-		std::vector<s_Xpow>				& xpow;
-		std::vector<long double>		& allNum;
-		long double						_maxDegree;
+		std::vector<s_Xpow>		& xpow;
+		long double				_maxDegree;
+		long double				_delta;
+		long double				_a;
+		long double				_b;
+		long double				_c;
 
 };
 

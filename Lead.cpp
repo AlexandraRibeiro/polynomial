@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/17 18:43:11 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/09/04 18:33:35 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/09/04 21:26:23 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,7 +145,7 @@ void		Lead::runReducer(void) {
 }
 
 void		Lead::runResolver(void) {
-	_resolver = new Resolver(_reducer->get_xpow(), _reducer->get_allNum(), _reducer->get_ld1());
+	_resolver = new Resolver(_reducer->get_xpow(), _reducer->get_ld1());
 
 	_resolver->tryToResolve();
 }
