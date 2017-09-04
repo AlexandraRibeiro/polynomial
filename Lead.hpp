@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/17 18:43:13 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/08/28 15:03:18 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/09/04 17:41:58 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "Lexer.hpp"
 # include "Parser.hpp"
 # include "Reducer.hpp"
+# include "Resolver.hpp"
 
 class Lead {
 
@@ -30,6 +31,7 @@ class Lead {
 		void		runLexer(void);
 		void		runParser(void);
 		void		runReducer(void);
+		void		runResolver(void);
 
 	private:
 		std::string					_arg;
@@ -37,6 +39,7 @@ class Lead {
 		Lexer						*_lexer;
 		Parser						*_parser;
 		Reducer						*_reducer;
+		Resolver					*_resolver;
 };
 
 #endif

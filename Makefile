@@ -6,7 +6,7 @@
 #    By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/03/20 19:26:31 by aribeiro          #+#    #+#              #
-#    Updated: 2017/08/25 23:01:58 by aribeiro         ###   ########.fr        #
+#    Updated: 2017/09/04 17:42:30 by aribeiro         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,6 +17,7 @@ SRC = 	BaseException.cpp \
 		Lexer.cpp \
 		Parser.cpp \
 		Reducer.cpp \
+		Resolver.cpp \
 		tools.cpp \
 		main.cpp
 

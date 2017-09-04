@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 17:41:10 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/09/04 16:46:56 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/09/04 18:20:36 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,9 +111,6 @@ void		Reducer::set_allNum(void) {
 			else if (c != 0 && lexical[c-1].token == MULTI)
 				_allNum.pop_back();
 		}
-		// if (lexical[c].token == MINUS && lexical[c+1].token == RNUM) {
-		// 	lexical[c+1].lexeme.insert(0,1,'-');
-		// }
 		if (c != 0 && lexical[c].token == END) {
 			_sign = -1;
 		}
@@ -409,7 +406,19 @@ bool	Reducer::print_sign(bool firstOp) {
 	return firstOp;
 }
 
-// GETTER ______________________________________________________________________
-std::vector<s_scanner>	&	Reducer::get_lexical(void) const {
+// GETTERS ______________________________________________________________________
+std::vector<s_scanner>		&	Reducer::get_lexical(void) const {
 	return lexical;
+}
+
+std::vector<s_Xpow>			& 	Reducer::get_xpow(void) {
+	return _Xpow;
+}
+
+std::vector<long double> 	&	Reducer::get_allNum(void) {
+	return _allNum;
+}
+
+long double					Reducer::get_ld1(void) const {
+	return _ld1;
 }

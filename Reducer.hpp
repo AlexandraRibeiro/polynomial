@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 17:41:13 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/09/04 15:58:00 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/09/04 18:15:26 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ class Reducer {
 		Reducer(std::vector<s_scanner> & lex);
 		Reducer(Reducer const & cpy);
 		~Reducer(void);
-		Reducer & operator=(Reducer const & );
+		Reducer & operator=(Reducer const & rhs);
 		//step1 CALCULATE * ^ RNUM _____________________________________________
 		void	calculate_powerNum(void);
 		void	calculate_multiNum(void);
@@ -51,7 +51,10 @@ class Reducer {
 		bool	print_sign(bool firstOp);
 
 		// GETTER ______________________________________________________________
-		std::vector<s_scanner>	& get_lexical(void) const;
+		std::vector<s_scanner>		& get_lexical(void) const;
+		std::vector<s_Xpow>			& get_xpow(void);
+		std::vector<long double>	& get_allNum(void);
+		long double					get_ld1(void) const;
 
 	private:
 		int								_sign;
