@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 17:41:10 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/09/03 15:45:01 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/09/04 16:46:56 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,9 +111,9 @@ void		Reducer::set_allNum(void) {
 			else if (c != 0 && lexical[c-1].token == MULTI)
 				_allNum.pop_back();
 		}
-		if (lexical[c].token == MINUS && lexical[c+1].token == RNUM) {
-			lexical[c+1].lexeme.insert(0,1,'-');
-		}
+		// if (lexical[c].token == MINUS && lexical[c+1].token == RNUM) {
+		// 	lexical[c+1].lexeme.insert(0,1,'-');
+		// }
 		if (c != 0 && lexical[c].token == END) {
 			_sign = -1;
 		}
@@ -221,6 +221,8 @@ void		Reducer::push_Xpow(size_t c) {
 		_ld1 = 1;
 		if (lexical[c].lexeme.compare("-X") == 0)
 			_Xpow[_j].allCoeff.push_back(-1);
+		else
+			_Xpow[_j].allCoeff.push_back(1);
 		_Xpow[_j].allPower.push_back(_ld1);
 	}
 }
@@ -326,8 +328,8 @@ void		Reducer::clean_Xpow(void) {
 }
 
 void		Reducer::match_power(size_t c, size_t k) {
-	_ld1 = 0;
-	_ld2 = 0;
+	_ld1 = 1;
+	_ld2 = 1;
 	if (_Xpow[k].allCoeff.size() > 0) {
 		_ld2 = _Xpow[k].allCoeff.back();
 		_Xpow[k].allCoeff.pop_back();
@@ -339,21 +341,28 @@ void		Reducer::match_power(size_t c, size_t k) {
 	_ld1 = _ld1 + (_ld2 * _Xpow[k].sign);
 	longToString(_ld1); //verif secu
 	_Xpow[c].allCoeff.push_back(_ld1);
-	// _Xpow[c].sign = _Xpow[c].sign * _Xpow[k].sign;
 }
 
 void		Reducer::print_reduceForm(void) {
-	long double min = -1;
-	size_t c = 0;
-	size_t k = 0;
-	_ld1 = 1;
-	_ld2 = 1;
+	bool firstOp = false;
 	std::cout << YELLOW << "Reduced form : " << NORMAL;
 	if (_allNum.size() == 1) {
 		if (_allNum[0] == -0)
 			_allNum[0] = 0;
 		std::cout << longToString(_allNum[0]) << ' ';
+		firstOp = true;
 	}
+	print_XpowMinToMax(firstOp);
+	std::cout << "= 0\n";
+}
+
+
+void	Reducer::print_XpowMinToMax(bool firstOp) {
+	long double min = -1;
+	size_t c = 0;
+	size_t k = 0;
+	_ld1 = 1;
+	_ld2 = 1;
 	while (c < _Xpow.size()) {
 		k = 0;
 		_j = 0;
@@ -362,6 +371,8 @@ void		Reducer::print_reduceForm(void) {
 				_ld1 = _Xpow[k].allPower.back();
 				if (_Xpow[k].allCoeff.size() == 1)
 					_ld2 = _Xpow[k].allCoeff.back();
+				else
+					_ld2 = 1;
 				_ld2 *= _Xpow[k].sign;
 				_j++;
 			}
@@ -372,20 +383,31 @@ void		Reducer::print_reduceForm(void) {
 		}
 		else if (k != 0) {
 			min = _ld1;
-			if (_allNum.size() == 1 && _ld2 >= 0)
-				std::cout << "+ ";
-			else if (_ld2 < 0) {
-				std::cout << "- ";
-				_ld2 *= -1;
-			}
+			firstOp = print_sign(firstOp);
 			std::cout << longToString(_ld2) << " * X^" << _ld1 << " ";
 			c++;
 		}
 	}
 
-	std::cout << "= 0\n";
 }
 
+bool	Reducer::print_sign(bool firstOp) {
+	if (firstOp == false) {
+		firstOp = true;
+		if (_ld2 < 0) {
+			std::cout << "- ";
+			_ld2 *= -1;
+		}
+	}
+	else if (_ld2 < 0) {
+		std::cout << "- ";
+		_ld2 *= -1;
+	}
+	else
+		std::cout << "+ ";
+
+	return firstOp;
+}
 
 // GETTER ______________________________________________________________________
 std::vector<s_scanner>	&	Reducer::get_lexical(void) const {

@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 22:55:25 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/09/03 15:43:42 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/09/04 16:39:51 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,9 @@ void			split(char delim, std::string &str, std::vector<std::string> &split) {
 long double		stringToLong(std::string & str) {
 	std::stringstream ss(str);
 	long double result ;
-	return ss >> result ? result : throw BaseException("=> (reducer) Error wrong value -> stringToLong.");
+	std::string error = "=> (reducer) Error wrong value -> stringToLong ";
+	error.append(str);
+	return ss >> result ? result : throw BaseException(error);
 }
 
 std::string longToString(long double ld) {

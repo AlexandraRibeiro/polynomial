@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/24 14:05:34 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/08/31 13:20:53 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/09/04 16:47:04 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,8 @@ size_t		Parser::set_booleans(int token, size_t c, std::vector<s_scanner> & lexic
 	else if (token > 3 && _op == false) {										// PLUS || MINUS || POWER || MULTI || DIV
 		_op = true;
 		_nb = false;
+		if (token == MINUS)
+			_sign = -1;
 	}
 	return c;
 }

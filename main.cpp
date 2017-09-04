@@ -6,14 +6,14 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/17 18:36:24 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/09/01 15:55:04 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/09/04 16:48:03 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Lead.hpp"
 
 bool	verbose_option = false;
-bool	debug_option = true;
+bool	debug_option = false;
 
 
 int		main(int ac, char **av)
