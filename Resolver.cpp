@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/04 17:35:39 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/09/05 00:24:29 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/09/05 00:53:15 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,21 +42,13 @@ void		Resolver::tryToResolve(void) {
 }
 
 void		Resolver::print_degree(void) {
-	std::cout << YELLOW << "Polynomial degree : " << NORMAL << _maxDegree << std::endl;
+	//verif multi par zero
+
 	if (_maxDegree > 2) {
 		std::cout << "The polynomial degree is stricly greater than 2, I can t solve.";
 		throw BaseException("");
 	}
-	else if (_maxDegree == 2)
-		discriminant();
-}
 
-
-void		Resolver::discriminant(void) {
-	/*
-	 * a * X^2 + b * X^1 + c * X^0 = 0
-	 * delta = b^2 - 4ac
-	 */
 	_a = 0;
 	_b = 0;
 	_c = 0;
@@ -70,13 +62,66 @@ void		Resolver::discriminant(void) {
 			_a = xpow[k].allCoeff.back();
 		k++;
 	}
+
+	if (_a != 0)
+		discriminant();
+	else if (_b != 0 && _a == 0)
+		resolve_1degree();
+}
+
+
+void		Resolver::resolve_1degree(void) {
+	_a = 0;
+	_b = 0;
+	int k = 0;
+
+	std::cout << YELLOW << "Polynomial degree : " << NORMAL << "1" << std::endl;
+
+	while (k < static_cast<int>(xpow.size()) && xpow[k].allPower.size() == 1) {
+		if (xpow[k].allPower.back() == 0)
+			_b = xpow[k].allCoeff.back();
+		else if (xpow[k].allPower.back() == 1)
+			_a = xpow[k].allCoeff.back();
+		k++;
+	}
+
+	std::cout << YELLOW << "The solution is :\n" << NORMAL;
+	if (_a != 0)
+		std::cout << std::setprecision(LDB_PRECIS) << - _b / _a << std::endl;
+	else
+		throw BaseException("=> (resolver) Error div by zero : x = -b/a");
+
+}
+
+void		Resolver::discriminant(void) {
+	/*
+	 * a * X^2 + b * X^1 + c * X^0 = 0
+	 * delta = b^2 - 4ac
+	 */
+
+	std::cout << YELLOW << "Polynomial degree : " << NORMAL << "2" << std::endl;
+
+	_a = 0;
+	_b = 0;
+	_c = 0;
+	int k = 0;
+	while (k < static_cast<int>(xpow.size())) {
+		if (xpow[k].allPower.back() == 0)
+			_c = xpow[k].allCoeff.back();
+		else if (xpow[k].allPower.back() == 1)
+			_b = xpow[k].allCoeff.back();
+		else if (xpow[k].allPower.back() == 2)
+			_a = xpow[k].allCoeff.back();
+		k++;
+	}
+
 	_delta = (_b * _b) - 4 * _a * _c;
 
 	if (verbose_option == true) {
 		std::cout << YELLOW << "\nDiscriminant :\n" << NORMAL;
 		std::cout << "delta = b^2 - 4 * a * c\n";
 		std::cout << "delta = " << _b << "^2 - 4 * " << _a << " * " << _c << std::endl;
-		std::cout << "delta = " << _delta << std::endl;
+		std::cout << "delta = " << std::setprecision(LDB_PRECIS) << _delta << std::endl;
 	}
 
 	if (_delta == 0)

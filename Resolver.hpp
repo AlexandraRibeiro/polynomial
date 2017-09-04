@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/04 17:35:46 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/09/05 00:05:20 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/09/05 00:39:47 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,13 @@ class Resolver {
 		// _____________________________________________________________________
 		void	tryToResolve(void);
 		void	print_degree(void);
+		// 1 DEGREE ____________________________________________________________
+		void	resolve_1degree(void);
 		// 2nd DEGREE __________________________________________________________
 		void	discriminant(void);
 		void	deltaZero(void);
 		void	deltaPositif(void);
-		void	deltaNeg(void); 
+		void	deltaNeg(void);
 		long double	heronMethod(void);
 		// GETTERS _____________________________________________________________
 		std::vector<s_Xpow>			& get_xpow(void) const;
