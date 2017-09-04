@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/04 17:35:39 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/09/05 00:53:15 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/09/05 01:01:49 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,9 +67,13 @@ void		Resolver::print_degree(void) {
 		discriminant();
 	else if (_b != 0 && _a == 0)
 		resolve_1degree();
+	else
+		resolve_others();
 }
 
 
+
+// DEGREE 1 ____________________________________________________________________
 void		Resolver::resolve_1degree(void) {
 	_a = 0;
 	_b = 0;
@@ -93,6 +97,9 @@ void		Resolver::resolve_1degree(void) {
 
 }
 
+
+
+// DEGREE 2 ____________________________________________________________________
 void		Resolver::discriminant(void) {
 	/*
 	 * a * X^2 + b * X^1 + c * X^0 = 0
@@ -209,6 +216,16 @@ long double		Resolver::heronMethod(void) {
 
 	return a1;
 }
+
+
+// OTHERS ______________________________________________________________________
+void			Resolver::resolve_others(void) {
+
+	_a = xpow[0].allCoeff.back();
+	if (_a != 0)
+		throw BaseException("=> (resolver) Error not a valid equation.");
+}
+
 
 // GETTERS _____________________________________________________________________
 std::vector<s_Xpow>			& Resolver::get_xpow(void) const {
