@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/04 17:35:39 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/09/05 18:19:41 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/09/05 18:31:08 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,12 @@ void		Resolver::print_degree(void) {
 			if (xpow[k].allCoeff.size() == 1)
 				_a = xpow[k].allCoeff.back();
 		}
-		else if (xpow[k].allPower.back() > _maxDegree)
-			_maxDegree = xpow[k].allPower.back();
+		else if (xpow[k].allPower.back() > _maxDegree) {
+			if (xpow[k].allCoeff.size() == 1) {
+				if (xpow[k].allCoeff.back() != 0)
+					_maxDegree = xpow[k].allPower.back();
+			}
+		}
 		k++;
 	}
 

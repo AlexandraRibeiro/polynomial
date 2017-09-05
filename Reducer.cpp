@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 17:41:10 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/09/05 17:54:08 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/09/05 18:23:00 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -467,7 +467,7 @@ void		Reducer::naturalForm_cases(void) {
 	else if (_ld2 == 1 && _ld1 == 1)
 		std::cout << "X ";
 	else if (_ld2 == 1 && _ld1 != 0 && _ld1 != 1)
-		std::cout << "X ^" << longToString(_ld1) << " ";
+		std::cout << "X^" << longToString(_ld1) << " ";
 	else if (_ld2 != 0 && _ld2 != 1 && _ld1 == 0)
 		std::cout << longToString(_ld2) << " ";
 	else if (_ld2 != 0 && _ld2 != 1 && _ld1 == 1)
