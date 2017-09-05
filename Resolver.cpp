@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/04 17:35:39 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/09/05 01:01:49 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/09/05 15:44:27 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,24 +42,34 @@ void		Resolver::tryToResolve(void) {
 }
 
 void		Resolver::print_degree(void) {
-	//verif multi par zero
-
-	if (_maxDegree > 2) {
-		std::cout << "The polynomial degree is stricly greater than 2, I can t solve.";
-		throw BaseException("");
-	}
-
 	_a = 0;
 	_b = 0;
 	_c = 0;
 	int k = 0;
 	while (k < static_cast<int>(xpow.size())) {
-		if (xpow[k].allPower.back() == 0)
-			_c = xpow[k].allCoeff.back();
-		else if (xpow[k].allPower.back() == 1)
-			_b = xpow[k].allCoeff.back();
-		else if (xpow[k].allPower.back() == 2)
-			_a = xpow[k].allCoeff.back();
+
+		if (xpow[k].allPower.back() == 0) {
+			_c = 1;
+			if (xpow[k].allCoeff.size() == 1)
+				_c = xpow[k].allCoeff.back();
+		}
+		else if (xpow[k].allPower.back() == 1) {
+			_b = 1;
+			if (xpow[k].allCoeff.size() == 1)
+				_b = xpow[k].allCoeff.back();
+		}
+		else if (xpow[k].allPower.back() == 2) {
+			_a = 1;
+			if (xpow[k].allCoeff.size() == 1)
+				_a = xpow[k].allCoeff.back();
+		}
+		else {
+			_maxDegree = 1;
+			if (xpow[k].allCoeff.size() == 1)
+				_maxDegree = xpow[k].allCoeff.back();
+			if (_maxDegree != 0)
+				throw BaseException("The polynomial degree is stricly greater than 2, I can't solve.");
+		}
 		k++;
 	}
 
@@ -75,25 +85,15 @@ void		Resolver::print_degree(void) {
 
 // DEGREE 1 ____________________________________________________________________
 void		Resolver::resolve_1degree(void) {
-	_a = 0;
-	_b = 0;
-	int k = 0;
+	long double result = - _c / _b;
 
 	std::cout << YELLOW << "Polynomial degree : " << NORMAL << "1" << std::endl;
-
-	while (k < static_cast<int>(xpow.size()) && xpow[k].allPower.size() == 1) {
-		if (xpow[k].allPower.back() == 0)
-			_b = xpow[k].allCoeff.back();
-		else if (xpow[k].allPower.back() == 1)
-			_a = xpow[k].allCoeff.back();
-		k++;
-	}
-
 	std::cout << YELLOW << "The solution is :\n" << NORMAL;
-	if (_a != 0)
-		std::cout << std::setprecision(LDB_PRECIS) << - _b / _a << std::endl;
+
+	if (result == -0)
+		std::cout << 0 << std::endl;
 	else
-		throw BaseException("=> (resolver) Error div by zero : x = -b/a");
+		std::cout << result << std::endl;
 
 }
 
@@ -128,7 +128,7 @@ void		Resolver::discriminant(void) {
 		std::cout << YELLOW << "\nDiscriminant :\n" << NORMAL;
 		std::cout << "delta = b^2 - 4 * a * c\n";
 		std::cout << "delta = " << _b << "^2 - 4 * " << _a << " * " << _c << std::endl;
-		std::cout << "delta = " << std::setprecision(LDB_PRECIS) << _delta << std::endl;
+		std::cout << "delta = " << _delta << std::endl;
 	}
 
 	if (_delta == 0)
@@ -149,7 +149,6 @@ void		Resolver::deltaZero(void) {
 	std::cout << "Discriminant is null.\n";
 	std::cout << YELLOW << "The solution is :\n" << NORMAL;
 
-	//attention div par zero!!!
 	std::cout << -_b / (2 * _a) << std::endl;
 
 }
@@ -168,7 +167,6 @@ void		Resolver::deltaPositif(void) {
 
 	std::cout << (-_b - racine) / (2 * _a) << std::endl;
 	std::cout << (-_b + racine) / (2 * _a) << std::endl;
-	//attention div par zero!!!
 
 	heronMethod();
 
@@ -183,21 +181,30 @@ void			Resolver::deltaNeg(void) {
 	*/
 
 	std::cout << "Discriminant is strictly negative.\n";
-	std::cout << YELLOW << "The two solutions are :\n" << NORMAL;
 
 	_delta *= -1;
+	long double imag = heronMethod();
+	long double under = 2 * _a;
 
-	if (_b > 0)
-		std::cout << "(-" << _b;
-	else
-		std::cout << "(" << _b;
-	std::cout << " - i√" << _delta << ") / (2 * " << _a << ")\n";
-
-	if (_b > 0)
-		std::cout << "(-" << _b;
-	else
-		std::cout << "(" << _b;
-	std::cout << " + i√" << _delta << ") / (2 * " << _a << ")\n";
+	if (imag == 0) {
+		std::cout << YELLOW << "The solutions are :\n" << NORMAL;
+		std::cout << -_b / under << std::endl;
+	}
+	else {
+		std::cout << YELLOW << "The two complex solutions are :\n" << NORMAL;
+		//x1
+		std::cout << (-_b / under) << " - ";
+		if (imag/under == 1)
+	 		std::cout << "i\n";
+		else
+			std::cout << imag/under << "i\n";
+		//x2
+		std::cout << (-_b / under) << " + ";
+		if (imag/under == 1)
+	 		std::cout << "i\n";
+		else
+			std::cout << imag/under << "i\n";
+	}
 }
 
 
@@ -208,7 +215,7 @@ long double		Resolver::heronMethod(void) {
 
 	average = _delta;
 
-	while (a1 > 1 && i < 7) {
+	while (a1 > 1 && i < 20) {
 		a1 = (average + _delta/average) / 2;
 		average = a1;
 		i++;
@@ -221,9 +228,13 @@ long double		Resolver::heronMethod(void) {
 // OTHERS ______________________________________________________________________
 void			Resolver::resolve_others(void) {
 
+	std::cout << YELLOW << "Polynomial degree : " << NORMAL << "0" << std::endl;
+
 	_a = xpow[0].allCoeff.back();
 	if (_a != 0)
 		throw BaseException("=> (resolver) Error not a valid equation.");
+	else
+		std::cout << "All real numbers are solution.\n";
 }
 
 

@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 17:41:10 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/09/04 21:04:41 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/09/05 15:08:29 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -293,17 +293,19 @@ void		Reducer::reduce_all(std::vector<long double> &all, int i) {
 
 void		Reducer::sort_power(void) {
 	int c = 0;
-	size_t k = 0;
+	int k = 0;
 	_sign = 0;
 	while (c < static_cast<int>(_Xpow.size())) {
 		if (_Xpow[c].allPower.size() == 1) {
 			_ld1 = _Xpow[c].allPower.back();
 			k = c + 1;															//be careful to watch only after
-			while (k < _Xpow.size()) {
-				if (_Xpow[k].allPower.size() == 1 && _ld1 == _Xpow[k].allPower.back()) {
-					match_power(c, k);
-					_Xpow.erase(_Xpow.begin() + k);
-					c--;
+			while (k < static_cast<int>(_Xpow.size())) {
+				if (_Xpow[k].allPower.size() == 1) {
+					if (_ld1 == _Xpow[k].allPower.back()) {
+						match_power(c, k);
+						_Xpow.erase(_Xpow.begin() + k);
+						c--;
+					}
 				}
 				k++;
 			}
@@ -319,19 +321,20 @@ void		Reducer::sort_power(void) {
 
 
 void		Reducer::match_power(size_t c, size_t k) {
-	_ld1 = 1;
+	long double ld1 = 1;
 	_ld2 = 1;
 	if (_Xpow[k].allCoeff.size() > 0) {
 		_ld2 = _Xpow[k].allCoeff.back();
 		_Xpow[k].allCoeff.pop_back();
 	}
 	if (_Xpow[c].allCoeff.size() > 0) {
-		_ld1 = _Xpow[c].allCoeff.back();
+		ld1 = _Xpow[c].allCoeff.back();
 		_Xpow[c].allCoeff.pop_back();
 	}
-	_ld1 = _ld1 + (_ld2 * _Xpow[k].sign);
-	longToString(_ld1); //verif secu
-	_Xpow[c].allCoeff.push_back(_ld1);
+
+	ld1 = ld1 + (_ld2 * _Xpow[k].sign);
+	longToString(ld1); //verif secu
+	_Xpow[c].allCoeff.push_back(ld1);
 }
 
 
