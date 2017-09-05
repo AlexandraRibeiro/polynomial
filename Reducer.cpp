@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 17:41:10 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/09/05 15:08:29 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/09/05 17:54:08 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ void		Reducer::calculate_powerNum(void) {
 	set_allNum();
 	set_Xpow();
 	reduceForm();
+	print_naturalForm();
 }
 
 void		Reducer::calculate_multiNum(void) {
@@ -332,9 +333,10 @@ void		Reducer::match_power(size_t c, size_t k) {
 		_Xpow[c].allCoeff.pop_back();
 	}
 
-	ld1 = ld1 + (_ld2 * _Xpow[k].sign);
+	ld1 = (ld1 * _Xpow[c].sign) + (_ld2 * _Xpow[k].sign);
 	longToString(ld1); //verif secu
 	_Xpow[c].allCoeff.push_back(ld1);
+	_Xpow[c].sign = 1;
 }
 
 
@@ -413,6 +415,65 @@ bool	Reducer::print_sign(bool firstOp) {
 		std::cout << "+ ";
 
 	return firstOp;
+}
+
+
+
+// PRINT NATURAL FORM __________________________________________________________
+void	Reducer::print_naturalForm(void) {
+	long double min = -1;
+	size_t c = 0;
+	size_t k = 0;
+	_ld1 = 1;
+	_ld2 = 1;
+	bool firstOp = false;
+	std::cout << YELLOW << "Natural form : " << NORMAL;
+	while (c < _Xpow.size()) {
+		k = 0;
+		_j = 0;
+		while (k < _Xpow.size()) {
+			if (_Xpow[k].allPower.size() == 1 && _Xpow[k].allPower.back() > min && _Xpow[k].allPower.back() < _ld1) {
+				_ld1 = _Xpow[k].allPower.back();
+				if (_Xpow[k].allCoeff.size() == 1)
+					_ld2 = _Xpow[k].allCoeff.back();
+				else
+					_ld2 = 1;
+				_ld2 *= _Xpow[k].sign;
+				_j++;
+			}
+			k++;
+		}
+
+		if (_j == 0) {
+			_ld1 = _ld1 + 2;
+		}
+		else if (k != 0) {
+			min = _ld1;
+			if (_ld2 != 0)
+				firstOp = print_sign(firstOp);
+				naturalForm_cases();
+			c++;
+		}
+	}
+	if (firstOp == false)
+ 		std::cout << "0 ";
+	std::cout << "= 0\n";
+}
+
+
+void		Reducer::naturalForm_cases(void) {
+	if (_ld2 == 1 && _ld1 == 0)
+		std::cout << "1 ";
+	else if (_ld2 == 1 && _ld1 == 1)
+		std::cout << "X ";
+	else if (_ld2 == 1 && _ld1 != 0 && _ld1 != 1)
+		std::cout << "X ^" << longToString(_ld1) << " ";
+	else if (_ld2 != 0 && _ld2 != 1 && _ld1 == 0)
+		std::cout << longToString(_ld2) << " ";
+	else if (_ld2 != 0 && _ld2 != 1 && _ld1 == 1)
+		std::cout << longToString(_ld2) << " * X ";
+	else if (_ld2 != 0)
+		std::cout << longToString(_ld2) << " * X^" << _ld1 << " ";
 }
 
 // GETTERS ______________________________________________________________________

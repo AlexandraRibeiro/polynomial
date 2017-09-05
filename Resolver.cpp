@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/04 17:35:39 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/09/05 15:44:27 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/09/05 18:19:41 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ void		Resolver::print_degree(void) {
 	_b = 0;
 	_c = 0;
 	int k = 0;
+	_maxDegree = 2;
 	while (k < static_cast<int>(xpow.size())) {
 
 		if (xpow[k].allPower.back() == 0) {
@@ -63,14 +64,15 @@ void		Resolver::print_degree(void) {
 			if (xpow[k].allCoeff.size() == 1)
 				_a = xpow[k].allCoeff.back();
 		}
-		else {
-			_maxDegree = 1;
-			if (xpow[k].allCoeff.size() == 1)
-				_maxDegree = xpow[k].allCoeff.back();
-			if (_maxDegree != 0)
-				throw BaseException("The polynomial degree is stricly greater than 2, I can't solve.");
-		}
+		else if (xpow[k].allPower.back() > _maxDegree)
+			_maxDegree = xpow[k].allPower.back();
 		k++;
+	}
+
+	if (_maxDegree > 2) {
+		std::cout << YELLOW << "Polynomial degree : " << NORMAL << _maxDegree << std::endl;
+		std::cout << "The polynomial degree is stricly greater than 2, I can't solve.";
+		throw BaseException("");
 	}
 
 	if (_a != 0)

@@ -6,7 +6,7 @@
 /*   By: aribeiro <aribeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 17:41:13 by aribeiro          #+#    #+#             */
-/*   Updated: 2017/09/04 21:04:45 by aribeiro         ###   ########.fr       */
+/*   Updated: 2017/09/05 17:46:29 by aribeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,9 @@ class Reducer {
 		void	print_reduceForm(void);
 		void	print_XpowMinToMax(void);
 		bool	print_sign(bool firstOp);
+		// PRINT NATURAL FORM __________________________________________________
+		void	print_naturalForm(void);
+		void	naturalForm_cases(void);
 
 		// GETTER ______________________________________________________________
 		std::vector<s_scanner>		& get_lexical(void) const;
