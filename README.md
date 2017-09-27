@@ -1,10 +1,13 @@
 # Polynomial equation calculator
 
 Ecrivez un programme qui résout une équation polynomiale de degré inférieur ou égal
-à 2. Vous devrez afficher au moins :
+à 2. Vous n’avez droit à aucune fonction/bibliothèque mathématique
+(hors addition et multiplication de réels) que vous n’ayez pas implémentée
+vous-mêmes. Vous devrez afficher au moins :
 - La forme réduite de l’équation.
 - Le degré de l’équation.
 - Sa ou ses solution(s), ainsi que le signe du discriminant quand cela a du sens.
+
 
 Bonus :
 - Gérer les erreurs sur l’entrée (lexique et syntaxe).
