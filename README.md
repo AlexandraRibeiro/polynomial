@@ -14,7 +14,8 @@ Bonus :
 - Accepter les puissances non ordonneées.
 - Accepter les coefficients multiples.
 
-#
+
+# Usage
 * make
 * ./computorV1
 * ./computorV1 "3 * X^1 + 4^7 - 5.1 = -X * X + 2 * X + X^2 * 6"
