@@ -20,3 +20,4 @@ Bonus :
 * ./computorV1
 * ./computorV1 "3 * X^1 + 4^7 - 5.1 = -X * X + 2 * X + X^2 * 6"
 * ./computorV1 "3 * X^1 + 4^7 - 5.1 = -X * X + 2 * X + X^2 * 6" -v
+#
