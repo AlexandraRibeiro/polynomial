@@ -4,18 +4,18 @@ Ecrivez un programme qui résout une équation polynomiale de degré inférieur 
 à 2. Vous n’avez droit à aucune fonction/bibliothèque mathématique
 (hors addition et multiplication de réels) que vous n’ayez pas implémentée
 vous-mêmes. Vous devrez afficher au moins :
-- La forme réduite de l’équation.
-- Le degré de l’équation.
-- Sa ou ses solution(s), ainsi que le signe du discriminant quand cela a du sens.
+- [x] La forme réduite de l’équation.
+- [x] Le degré de l’équation.
+- [x] Sa ou ses solution(s), ainsi que le signe du discriminant quand cela a du sens.
 
 
-Bonus :
-- Gérer les erreurs sur l’entrée (lexique et syntaxe).
-- Gérer les entrées/sorties sous forme naturelle.
-- Afficher des étapes intermédiaires. (-v)
-- Accepter les puissances sur les réels.
-- Accepter les puissances non ordonneées.
-- Accepter les coefficients multiples.
+## Bonus :
+- [x] Gérer les erreurs sur l’entrée (lexique et syntaxe).
+- [x] Gérer les entrées/sorties sous forme naturelle.
+- [x] Afficher des étapes intermédiaires. (-v)
+- [x] Accepter les puissances sur les réels.
+- [x] Accepter les puissances non ordonneées.
+- [x] Accepter les coefficients multiples.
 
 
 # Usage
